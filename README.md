@@ -4,13 +4,35 @@ A navigation bar system allowing to do a Tinder like or Twitter like.
 
 <div style="width:100%; height:450px;">
 <img src="Demos/TinderLike/tinder.gif" align="left" height="440" width="250" style="margin-left:20px;">
-<img src="Demos/TwitterLike/twitter.gif" align="left" height="440" width="250" style="margin-left:50px;">
+<img src="Demos/TwitterLike/twitter.gif" algin="right" height="440" width="250" style="margin-left:50px;">
 </div>
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
 ## Requirements
 
 * iOS 7.0+ 
 * ARC
+
+## Installation
+
+### CocoaPods
+
+[CocosPods](http://cocosPods.org) is the recommended method to install SLPagingView.
+
+Add the following line to your Podfile:
+
+```ruby
+pod 'SLPagingView'
+```
+
+And run
+```ruby
+pod install
+```
+
+### Manual
+
+Import SLPagingView folder into your project.
+
 
 ## How to use
 
