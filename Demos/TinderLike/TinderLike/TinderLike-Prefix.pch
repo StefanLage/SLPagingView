@@ -1,0 +1,18 @@
+//
+//  TinderLike-Prefix.pch
+//  TinderLike
+//
+//  Created by Stefan Lage on 25/11/14.
+//  Copyright (c) 2014 Stefan Lage. All rights reserved.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
