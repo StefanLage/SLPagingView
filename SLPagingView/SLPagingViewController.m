@@ -53,7 +53,8 @@
             // Be sure items contains only UIView's object
             if([[items objectAtIndex:i] isKindOfClass:UIView.class]){
                 UIView * v = [items objectAtIndex:i];
-                v.frame    = (CGRect){x, 8, CGRectGetWidth(v.frame), CGRectGetHeight(v.frame)};
+                CGSize vSize = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
+                v.frame    = (CGRect){(160-(vSize.width/2) + i*100), 8, vSize.width, vSize.height};
                 v.tag      = i;
                 UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                       action:@selector(tapOnHeader:)];
@@ -76,6 +77,12 @@
                     UIView *ctr = [views objectAtIndex:i];
                     // Set the tag
                     ctr.tag = i;
+                    [controllerKeys addObject:@(i)];
+                }
+                else if([[views objectAtIndex:i] isKindOfClass:UIViewController.class]){
+                    UIViewController *ctr = [views objectAtIndex:i];
+                    // Set the tag
+                    ctr.view.tag = i;
                     [controllerKeys addObject:@(i)];
                 }
             }
@@ -102,6 +109,10 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    
+    // Set header's background
+    [[UINavigationBar appearance] setBackgroundColor:[UIColor colorWithRed:0.33 green:0.68 blue:0.91 alpha:1.000]];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)didReceiveMemoryWarning{
@@ -125,13 +136,15 @@
 
 -(void)setupPagingProcess{
     // Make our ScrollView
-    self.scrollView                                = [[UIScrollView alloc] initWithFrame:self.view.frame];
+    CGRect t = CGRectMake(0, 0, 320, self.view.frame.size.height);
+    self.scrollView                                = [[UIScrollView alloc] initWithFrame:t];
     self.scrollView.backgroundColor                = [UIColor clearColor];
     self.scrollView.pagingEnabled                  = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator   = NO;
     self.scrollView.delegate                       = self;
     self.scrollView.bounces                        = NO;
+    [self.scrollView setContentInset:UIEdgeInsetsMake(0, 0, -80, 0)];
     [self.view addSubview:self.scrollView];
     
     // Adds all views
@@ -163,7 +176,7 @@
         int i =0;
         while((key = [enumerator nextObject])){
             UIView *v = [self.viewControllers objectForKey:key];
-            v.frame   = (CGRect){320 * i, 0, 320, CGRectGetHeight(self.view.frame)};
+            v.frame   = (CGRect){320 * i, 0, 320, CGRectGetHeight(self.view.frame)-60};
             [self.scrollView addSubview:v];
             i++;
         }
@@ -181,6 +194,10 @@
     }
 }
 
+-(CGSize) getLabelSize:(UILabel *)lbl{
+    return [[lbl text] sizeWithAttributes:@{NSFontAttributeName:[lbl font]}];;
+}
+
 #pragma mark - SLPagingViewDidChanged delegate
 
 -(void)sendNewIndex:(UIScrollView *)scrollView{
@@ -196,6 +213,14 @@
 #pragma mark - ScrollView delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat xOffset = scrollView.contentOffset.x;
+    int i = 0;
+    for(UIView *v in self.subviews){
+        CGSize vSize = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
+        v.frame = (CGRect){(160-(vSize.width/2) + i*100) - xOffset/3.2, 8, vSize.width, vSize.height};
+        i++;
+    }
+    
     if(self.pagingViewMoving)
         self.pagingViewMoving(scrollView, self.subviews);
 }
