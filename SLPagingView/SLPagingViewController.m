@@ -8,6 +8,8 @@
 
 #import "SLPagingViewController.h"
 
+#define SCREEN_SIZE [[UIScreen mainScreen] bounds].size
+
 @interface SLPagingViewController () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -47,21 +49,20 @@
         // UserInteraction activate by default
         self.isUserInteraction = YES;
 
-        int x                  = 140;
         int i                  = 0;
         for(i=0; i<items.count; i++){
             // Be sure items contains only UIView's object
             if([[items objectAtIndex:i] isKindOfClass:UIView.class]){
-                UIView * v = [items objectAtIndex:i];
-                CGSize vSize = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
-                v.frame    = (CGRect){(160-(vSize.width/2) + i*100), 8, vSize.width, vSize.height};
-                v.tag      = i;
+                UIView * v                  = [items objectAtIndex:i];
+                CGSize vSize                = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
+                CGFloat originX             = (SCREEN_SIZE.width/2 - vSize.width/2) + i*100;
+                v.frame                     = (CGRect){originX, 8, vSize.width, vSize.height};
+                v.tag                       = i;
                 UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                       action:@selector(tapOnHeader:)];
                 [v addGestureRecognizer:tap];
                 [v setUserInteractionEnabled:YES];
                 [_navigationBarView addSubview:v];
-                x += 100;
                 if(!_subviews)
                     _subviews = [[NSMutableArray alloc] init];
                 [_subviews addObject:[items objectAtIndex:i]];
@@ -123,7 +124,7 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    self.navigationBarView.frame = (CGRect){0, 0, 320, 44};    
+    self.navigationBarView.frame = (CGRect){0, 0, SCREEN_SIZE.width, 44};
 }
 
 #pragma mark - public methods
@@ -136,8 +137,8 @@
 
 -(void)setupPagingProcess{
     // Make our ScrollView
-    CGRect t = CGRectMake(0, 0, 320, self.view.frame.size.height);
-    self.scrollView                                = [[UIScrollView alloc] initWithFrame:t];
+    CGRect frame                                   = CGRectMake(0, 0, SCREEN_SIZE.width, self.view.frame.size.height);
+    self.scrollView                                = [[UIScrollView alloc] initWithFrame:frame];
     self.scrollView.backgroundColor                = [UIColor clearColor];
     self.scrollView.pagingEnabled                  = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
@@ -167,7 +168,7 @@
 -(void)addControllers{
     if(self.viewControllers
        && self.viewControllers.count > 0){
-        float width                 = 320 * self.viewControllers.count;
+        float width                 = SCREEN_SIZE.width * self.viewControllers.count;
         float height                = CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.navigationBarView.frame);
         self.scrollView.contentSize = (CGSize){width, height};
         
@@ -176,7 +177,7 @@
         int i =0;
         while((key = [enumerator nextObject])){
             UIView *v = [self.viewControllers objectForKey:key];
-            v.frame   = (CGRect){320 * i, 0, 320, CGRectGetHeight(self.view.frame)-60};
+            v.frame   = (CGRect){SCREEN_SIZE.width * i, 0, SCREEN_SIZE.width, CGRectGetHeight(self.view.frame)-60};
             [self.scrollView addSubview:v];
             i++;
         }
@@ -202,8 +203,8 @@
 
 -(void)sendNewIndex:(UIScrollView *)scrollView{
     if(self.needToShowPageControl){
-        CGFloat xOffset  = scrollView.contentOffset.x;
-        int currentIndex = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count *320)) / 320;
+        CGFloat xOffset              = scrollView.contentOffset.x;
+        int currentIndex             = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
         self.pageControl.currentPage = currentIndex;
         if(self.didChangedPage)
             self.didChangedPage(currentIndex);
@@ -216,8 +217,9 @@
     CGFloat xOffset = scrollView.contentOffset.x;
     int i = 0;
     for(UIView *v in self.subviews){
-        CGSize vSize = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
-        v.frame = (CGRect){(160-(vSize.width/2) + i*100) - xOffset/3.2, 8, vSize.width, vSize.height};
+        CGSize vSize    = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
+        CGFloat originX = ((SCREEN_SIZE.width/2 - vSize.width/2) + i*100) - xOffset/(SCREEN_SIZE.width/100);
+        v.frame         = (CGRect){originX, 8, vSize.width, vSize.height};
         i++;
     }
     
