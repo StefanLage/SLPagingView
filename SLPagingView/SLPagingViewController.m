@@ -23,9 +23,8 @@
 
 @implementation SLPagingViewController
 
-/*
- *  @param items should contain all subviews of the navigation bar
- */
+#pragma mark - constructors with views
+
 -(id)initWithNavBarItems:(NSArray*) items views:(NSArray*)views{
     return [self initWithNavBarItems:items
                     navBarBackground:[UIColor whiteColor]
@@ -102,6 +101,37 @@
     }
     return self;
 }
+
+#pragma mark - constructors with controllers
+
+-(id)initWithNavBarItems:(NSArray *)items controllers:(NSArray *)controllers{
+    return [self initWithNavBarItems:items
+                    navBarBackground:[UIColor whiteColor]
+                         controllers:controllers
+                     showPageControl:YES];
+}
+
+-(id)initWithNavBarItems:(NSArray *)items controllers:(NSArray *)controllers showPageControl:(BOOL)addPageControl{
+    return [self initWithNavBarItems:items
+                    navBarBackground:[UIColor whiteColor]
+                         controllers:controllers
+                     showPageControl:addPageControl];
+}
+
+-(id)initWithNavBarItems:(NSArray *)items navBarBackground:(UIColor *)background controllers:(NSArray *)controllers showPageControl:(BOOL)addPageControl{
+    NSMutableArray *views = [[NSMutableArray alloc] initWithCapacity:controllers.count];
+    for(int i =0; i<controllers.count; i++){
+        // Be sure we got s subclass of UIViewController
+        if([controllers[i] isKindOfClass:UIViewController.class])
+            [views addObject:[(UIViewController*)controllers[i] view]];
+    }
+    return [self initWithNavBarItems:items
+                    navBarBackground:background
+                               views:views
+                     showPageControl:addPageControl];
+}
+
+#pragma mark - LifeCycle
 
 - (void)loadView {
     [super loadView];
