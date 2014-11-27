@@ -82,6 +82,47 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
 /*
  *  SLPagingViewController's constructor
  *
+ *  Use controller's title as a navigation item
+ *
+ *  @param controllers view controllers containing sall subviews corresponding to each page
+ *
+ *  The navigation bar's background will be white
+ *  The page control is displayed by default
+ *
+ *  @return Instance of SLPagingViewController
+ */
+-(id)initWithNavBarControllers:(NSArray*)controllers;
+
+/*
+ *  SLPagingViewController's constructor
+ *
+ *  Use controller's title as a navigation item
+ *
+ *  @param controllers view controllers containing sall subviews corresponding to each page
+ *  @param showPageControl inform if we need to display the page control in the navigation bar
+ *
+ *  The navigation bar's background will be white
+ *
+ *  @return Instance of SLPagingViewController
+ */
+-(id)initWithNavBarControllers:(NSArray*)controllers showPageControl:(BOOL)addPageControl;
+
+/*
+ *  SLPagingViewController's constructor
+ *
+ *  Use controller's title as a navigation item
+ *
+ *  @param controllers view controllers containing sall subviews corresponding to each page
+ *  @param navBarBackground navigation bar's background color
+ *  @param showPageControl inform if we need to display the page control in the navigation bar
+ *
+ *  @return Instance of SLPagingViewController
+ */
+-(id)initWithNavBarControllers:(NSArray*)controllers navBarBackground:(UIColor*)background showPageControl:(BOOL)addPageControl;
+
+/*
+ *  SLPagingViewController's constructor
+ *
  *  @param items should contain all subviews of the navigation bar
  *  @param controllers view controllers containing sall subviews corresponding to each page
  *
