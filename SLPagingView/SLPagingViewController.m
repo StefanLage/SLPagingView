@@ -104,6 +104,40 @@
 
 #pragma mark - constructors with controllers
 
+-(id)initWithNavBarControllers:(NSArray *)controllers{
+    return [self initWithNavBarControllers:controllers
+                          navBarBackground:[UIColor whiteColor]
+                           showPageControl:YES];
+}
+
+-(id)initWithNavBarControllers:(NSArray *)controllers showPageControl:(BOOL)addPageControl{
+    return [self initWithNavBarControllers:controllers
+                          navBarBackground:[UIColor whiteColor]
+                           showPageControl:addPageControl];
+}
+
+-(id)initWithNavBarControllers:(NSArray *)controllers navBarBackground:(UIColor *)background showPageControl:(BOOL)addPageControl{
+    NSMutableArray *views = [[NSMutableArray alloc] initWithCapacity:controllers.count];
+    NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:controllers.count];
+    for(int i =0; i<controllers.count; i++){
+        // Be sure we got s subclass of UIViewController
+        if([controllers[i] isKindOfClass:UIViewController.class]){
+            UIViewController *ctr = controllers[i];
+            [views addObject:[ctr view]];
+            // Get associated item
+            UILabel *item = [UILabel new];
+            [item setText:ctr.title];
+            [items addObject:item];
+        }
+    }
+    return [self initWithNavBarItems:items
+                    navBarBackground:background
+                               views:views
+                     showPageControl:addPageControl];
+}
+
+#pragma mark - constructors with items & controllers
+
 -(id)initWithNavBarItems:(NSArray *)items controllers:(NSArray *)controllers{
     return [self initWithNavBarItems:items
                     navBarBackground:[UIColor whiteColor]
