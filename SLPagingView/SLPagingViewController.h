@@ -8,14 +8,27 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^SLPagingViewMoving)(UIScrollView * scrollView, NSArray *subviews);
+/*
+ *  Block delegates
+ */
+typedef void(^SLPagingViewMoving)(NSArray *subviews);
+typedef void(^SLPagingViewMovingRedefine)(UIScrollView * scrollView, NSArray *subviews);
 typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
+
 
 @interface SLPagingViewController : UIViewController
 
 /*
  *  Delegate: Called when the user scroll horizontally
- *  Allow to customized the behaviors
+ *  Allow to redefine all behaviors + customized the navigation items
+ *
+ *  @param scrollView
+ *  @param subviews, all subviews contains in the navigations bar
+ */
+@property (nonatomic, copy) SLPagingViewMovingRedefine pagingViewMovingRedefine;
+/*
+ *  Delegate: Called when the user scroll horizontally
+ *  Allow to customized the navigation items
  *
  *  @param scrollView
  *  @param subviews, all subviews contains in the navigations bar
