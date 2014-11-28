@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, SLNavigationSideItemsStyle) {
+    SLNavigationSideItemsStyleOnBounds = 40,
+    SLNavigationSideItemsStyleClose = 30,
+    SLNavigationSideItemsStyleNormal = 20,
+    SLNavigationSideItemsStyleFar = 10,
+    SLNavigationSideItemsStyleDefault = 0,
+    SLNavigationSideItemsStyleCloseToEachOne = -40
+};
+
 /*
  *  Block delegates
  */
@@ -53,6 +62,11 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
  */
 @property (nonatomic, strong) UIColor *currentPageControlColor;
 
+/*
+ *  Navigation Items Style
+ *  Allow to move items from the screen bounds to the center
+ */
+@property (nonatomic) SLNavigationSideItemsStyle navigationSideItemsStyle;
 
 /*
  *  SLPagingViewController's constructor
