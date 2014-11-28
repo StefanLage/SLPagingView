@@ -42,13 +42,14 @@
 -(id)initWithNavBarItems:(NSArray*)items navBarBackground:(UIColor*)background views:(NSArray*)views showPageControl:(BOOL)addPageControl{
     self = [super init];
     if(self){
-        _needToShowPageControl = addPageControl;
-        _navigationBarView     = [[UIView alloc] init];
+        _needToShowPageControl        = addPageControl;
+        _navigationBarView            = [[UIView alloc] init];
         [_navigationBarView setBackgroundColor:background];
         // UserInteraction activate by default
-        self.isUserInteraction = YES;
-
-        int i                  = 0;
+        self.isUserInteraction        = YES;
+        // Default value for the navigation style
+        self.navigationSideItemsStyle = SLNavigationSideItemsStyleDefault;
+        int i                         = 0;
         for(i=0; i<items.count; i++){
             // Be sure items contains only UIView's object
             if([[items objectAtIndex:i] isKindOfClass:UIView.class]){
@@ -281,9 +282,10 @@
     CGFloat xOffset = scrollView.contentOffset.x;
     int i = 0;
     for(UIView *v in self.subviews){
-        CGSize vSize    = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
-        CGFloat originX = ((SCREEN_SIZE.width/2 - vSize.width/2) + i*100) - xOffset/(SCREEN_SIZE.width/100);
-        v.frame         = (CGRect){originX, 8, vSize.width, vSize.height};
+        CGFloat distance = 100 + self.navigationSideItemsStyle;
+        CGSize vSize     = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
+        CGFloat originX  = ((SCREEN_SIZE.width/2 - vSize.width/2) + i*distance) - xOffset/(SCREEN_SIZE.width/distance);
+        v.frame          = (CGRect){originX, 8, vSize.width, vSize.height};
         i++;
     }
     if(self.pagingViewMoving)
