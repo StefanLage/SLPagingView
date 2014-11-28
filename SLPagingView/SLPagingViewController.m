@@ -286,9 +286,12 @@
         v.frame         = (CGRect){originX, 8, vSize.width, vSize.height};
         i++;
     }
-    
     if(self.pagingViewMoving)
-        self.pagingViewMoving(scrollView, self.subviews);
+        // Customize the navigation items
+        self.pagingViewMoving(self.subviews);
+    if(self.pagingViewMovingRedefine)
+        // Wants to redefine all behaviors
+        self.pagingViewMovingRedefine(scrollView, self.subviews);
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
