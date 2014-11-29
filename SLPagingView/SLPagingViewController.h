@@ -192,5 +192,11 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
  */
 -(void)updateUserInteractionOnNavigation:(BOOL)activate;
 
+/*
+ *  Set the current index page and scroll to its position
+ *
+ *  @param index of the wanted page
+ */
+-(void)setCurrentIndex:(NSInteger) index;
 
 @end
