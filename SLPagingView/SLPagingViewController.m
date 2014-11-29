@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSMutableArray *subviews;
 @property (nonatomic) BOOL needToShowPageControl;
 @property (nonatomic) BOOL isUserInteraction;
+@property (nonatomic) NSInteger indexSelected;
 
 @end
 
@@ -179,6 +180,7 @@
     // Set header's background
     [[UINavigationBar appearance] setBackgroundColor:[UIColor colorWithRed:0.33 green:0.68 blue:0.91 alpha:1.000]];
     [self setNeedsStatusBarAppearanceUpdate];
+    [self setCurrentIndex:self.indexSelected];
 }
 
 - (void)didReceiveMemoryWarning{
@@ -196,6 +198,21 @@
 
 -(void)updateUserInteractionOnNavigation:(BOOL)activate{
     self.isUserInteraction = activate;
+}
+
+-(void)setCurrentIndex:(NSInteger) index{
+    // Be sure we got an existing index
+    if(index < 0 || index > self.navigationBarView.subviews.count-1){
+        NSException *exc = [[NSException alloc] initWithName:@"Index out of range"
+                                                      reason:@"The index is out of range of subviews's count!"
+                                                    userInfo:nil];
+        @throw exc;
+    }
+    // save current index
+    self.indexSelected = index;
+    // Get the right position and update it
+    CGFloat xOffset    = (index * ((int)SCREEN_SIZE.width));
+    [self.scrollView setContentOffset:CGPointMake(xOffset, self.scrollView.contentOffset.y)];
 }
 
 #pragma mark - Internal methods
@@ -267,13 +284,11 @@
 #pragma mark - SLPagingViewDidChanged delegate
 
 -(void)sendNewIndex:(UIScrollView *)scrollView{
-    if(self.needToShowPageControl){
-        CGFloat xOffset              = scrollView.contentOffset.x;
-        int currentIndex             = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
-        self.pageControl.currentPage = currentIndex;
-        if(self.didChangedPage)
-            self.didChangedPage(currentIndex);
-    }
+    CGFloat xOffset              = scrollView.contentOffset.x;
+    int currentIndex             = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
+    self.pageControl.currentPage = currentIndex;
+    if(self.didChangedPage)
+        self.didChangedPage(currentIndex);
 }
 
 #pragma mark - ScrollView delegate
