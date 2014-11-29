@@ -118,5 +118,45 @@ Twitter like behaviors
     };
 ````
 
+##API
+
+###Set current page
+
+If you want to changed the default page control index (or whatever) you can do it calling:
+
+````objective-c
+
+	-(void)setCurrentIndex:(NSInteger) index;
+````
+
+###Navigation items style
+
+<img src="Demos/TinderLike/navigation_style.gif" height="440" width="250" style="margin-left:50px;">
+
+You can easily customized the navigation items setting up:
+
+
+````objective-c
+
+	@property (nonatomic) SLNavigationSideItemsStyle navigationSideItemsStyle;
+````
+
+
+By using one of these values:
+
+
+````objective-c
+
+	typedef NS_ENUM(NSInteger, SLNavigationSideItemsStyle) {
+		SLNavigationSideItemsStyleOnBounds,
+		SLNavigationSideItemsStyleClose,
+		SLNavigationSideItemsStyleNormal,
+		SLNavigationSideItemsStyleFar,
+		SLNavigationSideItemsStyleDefault,
+		SLNavigationSideItemsStyleCloseToEachOne
+	};
+````
+
+
 ##License
 Available under MIT license, please read LICENSE for more informations.
