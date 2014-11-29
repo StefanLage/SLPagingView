@@ -36,7 +36,7 @@ Import SLPagingView folder into your project.
 
 ## How to use
 
-Easy to immplement:
+Easy to implement:
 
 ```` objective-c
 
@@ -65,7 +65,7 @@ Then you can make your own behaviors:
 ````objective-c
 
 	// Tinder Like
-    pageViewController.pagingViewMoving = ^(UIScrollView *scrollView, NSArray *subviews){
+    pageViewController.pagingViewMovingRedefine = ^(UIScrollView *scrollView, NSArray *subviews){
         int i = 0;
         for(UIImageView *v in subviews){
             UIColor *c = gray;
@@ -101,7 +101,7 @@ Twitter like behaviors
 ````objective-c
 
 	// Twitter Like
-    pageViewController.pagingViewMoving = ^(UIScrollView *scrollView, NSArray *subviews){
+    pageViewController.pagingViewMovingRedefine = ^(UIScrollView *scrollView, NSArray *subviews){
         CGFloat xOffset = scrollView.contentOffset.x;
         int i = 0;
         for(UILabel *v in subviews){
@@ -117,6 +117,46 @@ Twitter like behaviors
         }
     };
 ````
+
+##API
+
+###Set current page
+
+If you want to changed the default page control index (or whatever) you can do it calling:
+
+````objective-c
+
+	-(void)setCurrentIndex:(NSInteger) index;
+````
+
+###Navigation items style
+
+<img src="Demos/TinderLike/navigation_style.gif" height="440" width="250" style="margin-left:50px;">
+
+You can easily customized the navigation items setting up:
+
+
+````objective-c
+
+	@property (nonatomic) SLNavigationSideItemsStyle navigationSideItemsStyle;
+````
+
+
+By using one of these values:
+
+
+````objective-c
+
+	typedef NS_ENUM(NSInteger, SLNavigationSideItemsStyle) {
+		SLNavigationSideItemsStyleOnBounds,
+		SLNavigationSideItemsStyleClose,
+		SLNavigationSideItemsStyleNormal,
+		SLNavigationSideItemsStyleFar,
+		SLNavigationSideItemsStyleDefault,
+		SLNavigationSideItemsStyleCloseToEachOne
+	};
+````
+
 
 ##License
 Available under MIT license, please read LICENSE for more informations.
