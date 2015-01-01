@@ -47,7 +47,7 @@
                                                                                                views:@[[self viewWithBackground:orange], [self viewWithBackground:[UIColor yellowColor]], [self viewWithBackground:gray]]
                                                                                      showPageControl:NO];
     // Tinder Like
-    pageViewController.pagingViewMoving = ^(UIScrollView *scrollView, NSArray *subviews){
+    pageViewController.pagingViewMoving = ^(NSArray *subviews){
         int i = 0;
         for(UIImageView *v in subviews){
             UIColor *c = gray;
