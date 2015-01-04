@@ -53,7 +53,7 @@
     [pageViewController updateUserInteractionOnNavigation:NO];
     
     // Twitter Like
-    pageViewController.pagingViewMoving = ^(UIScrollView *scrollView, NSArray *subviews){
+    pageViewController.pagingViewMovingRedefine = ^(UIScrollView *scrollView, NSArray *subviews){
         CGFloat xOffset = scrollView.contentOffset.x;
         int i = 0;
         for(UILabel *v in subviews){
