@@ -180,7 +180,7 @@
     // Set header's background
     [[UINavigationBar appearance] setBackgroundColor:[UIColor colorWithRed:0.33 green:0.68 blue:0.91 alpha:1.000]];
     [self setNeedsStatusBarAppearanceUpdate];
-    [self setCurrentIndex:self.indexSelected];
+    [self setCurrentIndex:self.indexSelected animated:NO];
 }
 
 - (void)didReceiveMemoryWarning{
@@ -200,7 +200,7 @@
     self.isUserInteraction = activate;
 }
 
--(void)setCurrentIndex:(NSInteger) index{
+-(void)setCurrentIndex:(NSInteger)index animated:(BOOL)animated{
     // Be sure we got an existing index
     if(index < 0 || index > self.navigationBarView.subviews.count-1){
         NSException *exc = [[NSException alloc] initWithName:@"Index out of range"
@@ -212,7 +212,7 @@
     self.indexSelected = index;
     // Get the right position and update it
     CGFloat xOffset    = (index * ((int)SCREEN_SIZE.width));
-    [self.scrollView setContentOffset:CGPointMake(xOffset, self.scrollView.contentOffset.y)];
+    [self.scrollView setContentOffset:CGPointMake(xOffset, self.scrollView.contentOffset.y) animated:animated];
 }
 
 #pragma mark - Internal methods
@@ -286,9 +286,12 @@
 -(void)sendNewIndex:(UIScrollView *)scrollView{
     CGFloat xOffset              = scrollView.contentOffset.x;
     int currentIndex             = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
-    self.pageControl.currentPage = currentIndex;
-    if(self.didChangedPage)
-        self.didChangedPage(currentIndex);
+    if (self.pageControl.currentPage != currentIndex)
+    {
+        self.pageControl.currentPage = currentIndex;
+        if(self.didChangedPage)
+            self.didChangedPage(currentIndex);
+    }
 }
 
 #pragma mark - ScrollView delegate

@@ -197,6 +197,6 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
  *
  *  @param index of the wanted page
  */
--(void)setCurrentIndex:(NSInteger) index;
+-(void)setCurrentIndex:(NSInteger)index animated:(BOOL)animated;
 
 @end
