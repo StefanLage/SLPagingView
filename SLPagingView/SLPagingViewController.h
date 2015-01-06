@@ -196,6 +196,7 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
  *  Set the current index page and scroll to its position
  *
  *  @param index of the wanted page
+ *  @param animated animate the moving
  */
 -(void)setCurrentIndex:(NSInteger)index animated:(BOOL)animated;
 

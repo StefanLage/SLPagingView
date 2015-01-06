@@ -126,7 +126,7 @@ If you want to changed the default page control index (or whatever) you can do i
 
 ````objective-c
 
-	-(void)setCurrentIndex:(NSInteger) index;
+	-(void)setCurrentIndex:(NSInteger)index animated:(BOOL)animated;
 ````
 
 ###Navigation items style
