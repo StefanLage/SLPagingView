@@ -253,17 +253,13 @@
         float width                 = SCREEN_SIZE.width * self.viewControllers.count;
         float height                = CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.navigationBarView.frame);
         self.scrollView.contentSize = (CGSize){width, height};
-        
-        NSEnumerator *enumerator    = [self.viewControllers keyEnumerator];
-        id key;
-        int i =0;
-        while((key = [enumerator nextObject])){
+        __block int i               = 0;
+        [self.viewControllers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             UIView *v = [self.viewControllers objectForKey:key];
             v.frame   = (CGRect){SCREEN_SIZE.width * i, 0, SCREEN_SIZE.width, CGRectGetHeight(self.view.frame)-60};
             [self.scrollView addSubview:v];
             i++;
-        }
-            
+        }];
     }
 }
 
