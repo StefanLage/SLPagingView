@@ -264,8 +264,9 @@
 
 // Add a view as a navigationBarItem
 -(void)addNavigationItem:(UIView*)v tag:(int)tag{
+    CGFloat distance            = (SCREEN_SIZE.width/2) - self.navigationSideItemsStyle;
     CGSize vSize                = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
-    CGFloat originX             = (SCREEN_SIZE.width/2 - vSize.width/2) + self.subviews.count*(100 + self.navigationSideItemsStyle);
+    CGFloat originX             = (SCREEN_SIZE.width/2 - vSize.width/2) + self.subviews.count*distance;
     v.frame                     = (CGRect){originX, 8, vSize.width, vSize.height};
     v.tag                       = tag;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
@@ -317,7 +318,7 @@
         __block int i               = 0;
         [self.viewControllers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             UIView *v = [self.viewControllers objectForKey:key];
-            v.frame   = (CGRect){SCREEN_SIZE.width * i, 0, SCREEN_SIZE.width, CGRectGetHeight(self.view.frame)-60};
+            v.frame   = (CGRect){SCREEN_SIZE.width * i, 0, SCREEN_SIZE.width, CGRectGetHeight(self.view.frame)};
             [self.scrollView addSubview:v];
             i++;
         }];
@@ -357,7 +358,7 @@
     CGFloat xOffset = scrollView.contentOffset.x;
     int i = 0;
     for(UIView *v in self.subviews){
-        CGFloat distance = 100 + self.navigationSideItemsStyle;
+        CGFloat distance = (SCREEN_SIZE.width/2) - self.navigationSideItemsStyle;
         CGSize vSize     = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
         CGFloat originX  = ((SCREEN_SIZE.width/2 - vSize.width/2) + i*distance) - xOffset/(SCREEN_SIZE.width/distance);
         v.frame          = (CGRect){originX, 8, vSize.width, vSize.height};
