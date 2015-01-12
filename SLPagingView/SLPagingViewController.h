@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, SLNavigationSideItemsStyle) {
-    SLNavigationSideItemsStyleOnBounds = 40,
-    SLNavigationSideItemsStyleClose = 30,
-    SLNavigationSideItemsStyleNormal = 20,
-    SLNavigationSideItemsStyleFar = 10,
-    SLNavigationSideItemsStyleDefault = 0,
-    SLNavigationSideItemsStyleCloseToEachOne = -40
+    SLNavigationSideItemsStyleOnBounds = 20,
+    SLNavigationSideItemsStyleClose = 70,
+    SLNavigationSideItemsStyleNormal = 80,
+    SLNavigationSideItemsStyleFar = 90,
+    SLNavigationSideItemsStyleDefault = 60,
+    SLNavigationSideItemsStyleCloseToEachOne = 100
 };
 
 /*
