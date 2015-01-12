@@ -157,6 +157,17 @@ By using one of these values:
 	};
 ````
 
+##Storyboard support
+
+This class can be implemented using Storyboard.
+You need to set all identifiers of the segues linked to your SLPagingViewController respecting this syntax: 
+` sl_X where X ∈ [0..N] `.
+
+X corresponding to the index of the view, start from 0 and it works in ascending order.
+
+![segue](Demos/TinderStoryboard/segue_params.png)
+
+You can find an example "TinderStoryboard" for more informations.
 
 ##License
 Available under MIT license, please read LICENSE for more informations.
