@@ -1,4 +1,7 @@
 # SLPagingView
+[![Build Status](https://travis-ci.org/StefanLage/SLPagingView.svg?branch=master)](https://travis-ci.org/StefanLage/SLPagingView)
+[![Version](https://img.shields.io/cocoapods/v/SLPagingView.svg?style=flat)](http://cocoadocs.org/docsets/SLPagingView)
+[![License](https://img.shields.io/cocoapods/l/SLPagingView.svg?style=flat)](http://cocoadocs.org/docsets/SLPagingView)
 
 A navigation bar system allowing to do a Tinder like or Twitter like.
 

@@ -31,7 +31,6 @@
 
 /* Begin PBXFileReference section */
 		F8E157F31A63DD3C00AA1A2E /* TinderStoryboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderStoryboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F8E1580C1A63DD3D00AA1A2E /* TinderStoryboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinderStoryboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E1581D1A63DD6100AA1A2E /* SLPagingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLPagingViewController.h; path = ../../SLPagingView/SLPagingViewController.h; sourceTree = "<group>"; };
 		F8E1581E1A63DD6100AA1A2E /* SLPagingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLPagingViewController.m; path = ../../SLPagingView/SLPagingViewController.m; sourceTree = "<group>"; };
 		F8E158271A64373600AA1A2E /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatController.h; path = TinderStoryboard/ChatController.h; sourceTree = SOURCE_ROOT; };
@@ -80,7 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				F8E157F31A63DD3C00AA1A2E /* TinderStoryboard.app */,
-				F8E1580C1A63DD3D00AA1A2E /* TinderStoryboardTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -151,24 +149,6 @@
 			productReference = F8E157F31A63DD3C00AA1A2E /* TinderStoryboard.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F8E1580B1A63DD3D00AA1A2E /* TinderStoryboardTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F8E158191A63DD3D00AA1A2E /* Build configuration list for PBXNativeTarget "TinderStoryboardTests" */;
-			buildPhases = (
-				F8E158081A63DD3D00AA1A2E /* Sources */,
-				F8E158091A63DD3D00AA1A2E /* Frameworks */,
-				F8E1580A1A63DD3D00AA1A2E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F8E1580E1A63DD3D00AA1A2E /* PBXTargetDependency */,
-			);
-			name = TinderStoryboardTests;
-			productName = TindertStoryboardTests;
-			productReference = F8E1580C1A63DD3D00AA1A2E /* TinderStoryboardTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -201,7 +181,6 @@
 			projectRoot = "";
 			targets = (
 				F8E157F21A63DD3C00AA1A2E /* TinderStoryboard */,
-				F8E1580B1A63DD3D00AA1A2E /* TinderStoryboardTests */,
 			);
 		};
 /* End PBXProject section */
@@ -374,40 +353,6 @@
 			};
 			name = Release;
 		};
-		F8E1581A1A63DD3D00AA1A2E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = TinderStoryboardTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = TinderStoryboardTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TinderStoryboard.app/TinderStoryboard";
-			};
-			name = Debug;
-		};
-		F8E1581B1A63DD3D00AA1A2E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = TinderStoryboardTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = TinderStoryboardTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TinderStoryboard.app/TinderStoryboard";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -425,15 +370,6 @@
 			buildConfigurations = (
 				F8E158171A63DD3D00AA1A2E /* Debug */,
 				F8E158181A63DD3D00AA1A2E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F8E158191A63DD3D00AA1A2E /* Build configuration list for PBXNativeTarget "TinderStoryboardTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F8E1581A1A63DD3D00AA1A2E /* Debug */,
-				F8E1581B1A63DD3D00AA1A2E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
