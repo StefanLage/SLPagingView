@@ -209,3 +209,8 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
 -(void)addViewControllers:(UIViewController *) controller needToRefresh:(BOOL) refresh;
 
 @end
+
+extern NSString* const SLPagingViewPrefixIdentifier;  // this is @"sl_"
+
+@interface SLPagingViewControllerSegueSetController : UIStoryboardSegue
+@end

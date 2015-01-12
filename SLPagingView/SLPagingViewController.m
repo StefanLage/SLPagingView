@@ -24,6 +24,14 @@
 
 @implementation SLPagingViewController
 
+-(id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if(self){
+        [self initCrucialObjects:[UIColor whiteColor]];
+    }
+    return self;
+}
+
 #pragma mark - constructors with views
 
 -(id)initWithNavBarItems:(NSArray*) items views:(NSArray*)views{
@@ -152,6 +160,9 @@
 
 - (void)loadView {
     [super loadView];
+    // Try to load controller from storyboard
+    [self loadStoryboardControllers];
+    // Set up the controller
     [self setupPagingProcess];
 }
 
@@ -228,6 +239,27 @@
     _navigationSideItemsStyle          = SLNavigationSideItemsStyleDefault;
     _viewControllers                   = [NSMutableDictionary new];
     _subviews                          = [NSMutableArray new];
+}
+
+// Load any defined controllers from the storyboard
+- (void)loadStoryboardControllers
+{
+    if (self.storyboard)
+    {
+        BOOL isThereNextIdentifier = YES;
+        int idx = 0;
+        while (isThereNextIdentifier) {
+            @try
+            {
+                [self performSegueWithIdentifier:[NSString stringWithFormat:@"%@%d", SLPagingViewPrefixIdentifier, idx]
+                                          sender:nil];
+                idx++;
+            }
+            @catch(NSException *exception) {
+                isThereNextIdentifier = NO;
+            }
+        }
+    }
 }
 
 // Add a view as a navigationBarItem
@@ -345,5 +377,25 @@
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
     [self sendNewIndex:scrollView];
 }
+
+@end
+
+#pragma mark - SLPagingViewControllerSegueSetController segue identifier's prefix
+
+NSString * const SLPagingViewPrefixIdentifier = @"sl_";
+
+#pragma mark - SLPagingViewControllerSegueSetController class
+
+@implementation SLPagingViewControllerSegueSetController
+
+-(void)perform{
+    // Get SLPagingViewController (sourceViewController)
+    SLPagingViewController *src = self.sourceViewController;
+    // Add it to the subviews
+    if(self.destinationViewController)
+        [src addViewControllers:self.destinationViewController
+                  needToRefresh:NO];
+}
+
 
 @end
