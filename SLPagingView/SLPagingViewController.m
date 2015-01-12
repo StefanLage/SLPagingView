@@ -43,31 +43,12 @@
 -(id)initWithNavBarItems:(NSArray*)items navBarBackground:(UIColor*)background views:(NSArray*)views showPageControl:(BOOL)addPageControl{
     self = [super init];
     if(self){
-        _needToShowPageControl        = addPageControl;
-        _navigationBarView            = [[UIView alloc] init];
-        [_navigationBarView setBackgroundColor:background];
-        // UserInteraction activate by default
-        self.isUserInteraction        = YES;
-        // Default value for the navigation style
-        self.navigationSideItemsStyle = SLNavigationSideItemsStyleDefault;
+        [self initCrucialObjects:background];
         int i                         = 0;
         for(i=0; i<items.count; i++){
             // Be sure items contains only UIView's object
-            if([[items objectAtIndex:i] isKindOfClass:UIView.class]){
-                UIView * v                  = [items objectAtIndex:i];
-                CGSize vSize                = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
-                CGFloat originX             = (SCREEN_SIZE.width/2 - vSize.width/2) + i*100;
-                v.frame                     = (CGRect){originX, 8, vSize.width, vSize.height};
-                v.tag                       = i;
-                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                      action:@selector(tapOnHeader:)];
-                [v addGestureRecognizer:tap];
-                [v setUserInteractionEnabled:YES];
-                [_navigationBarView addSubview:v];
-                if(!_subviews)
-                    _subviews = [[NSMutableArray alloc] init];
-                [_subviews addObject:[items objectAtIndex:i]];
-            }
+            if([[items objectAtIndex:i] isKindOfClass:UIView.class])
+                [self addNavigationItem:[items objectAtIndex:i] tag:i];
         }
         
         // is there any controllers ?
@@ -90,8 +71,8 @@
             }
             // Number of keys equals number of controllers ?
             if(controllerKeys.count == views.count)
-                _viewControllers = [[NSDictionary alloc] initWithObjects:views
-                                                                 forKeys:controllerKeys];
+                _viewControllers = [[NSMutableDictionary alloc] initWithObjects:views
+                                                                        forKeys:controllerKeys];
             else{
                 // Something went wrong -> inform the client
                 NSException *exc = [[NSException alloc] initWithName:@"View Controllers error"
@@ -176,11 +157,8 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    
-    // Set header's background
-    [[UINavigationBar appearance] setBackgroundColor:[UIColor colorWithRed:0.33 green:0.68 blue:0.91 alpha:1.000]];
-    [self setNeedsStatusBarAppearanceUpdate];
-    [self setCurrentIndex:self.indexSelected animated:NO];
+    [self setCurrentIndex:self.indexSelected
+                 animated:NO];
 }
 
 - (void)didReceiveMemoryWarning{
@@ -215,7 +193,58 @@
     [self.scrollView setContentOffset:CGPointMake(xOffset, self.scrollView.contentOffset.y) animated:animated];
 }
 
+-(void)addViewControllers:(UIViewController *) controller needToRefresh:(BOOL) refresh{
+    int tag = (int)self.viewControllers.count;
+    // Try to get a navigation item
+    UIView *v = nil;
+    if(controller.title){
+        UILabel *item = [UILabel new];
+        [item setText:controller.title];
+        v = item;
+    }
+    else if(controller.navigationItem && controller.navigationItem.titleView){
+        v = controller.navigationItem.titleView;
+    }
+    // Adds a navigation item
+    [self addNavigationItem:v
+                        tag:tag];
+    // Save the controller
+    [self.viewControllers setObject:controller.view
+                             forKey:@(tag)];
+    // Do we need to refresh the UI ?
+    if(refresh)
+       [self setupPagingProcess];
+}
+
 #pragma mark - Internal methods
+
+-(void) initCrucialObjects:(UIColor *)background{
+    _needToShowPageControl             = NO;
+    _navigationBarView                 = [[UIView alloc] init];
+    _navigationBarView.backgroundColor = background;
+    // UserInteraction activate by default
+    _isUserInteraction                 = YES;
+    // Default value for the navigation style
+    _navigationSideItemsStyle          = SLNavigationSideItemsStyleDefault;
+    _viewControllers                   = [NSMutableDictionary new];
+    _subviews                          = [NSMutableArray new];
+}
+
+// Add a view as a navigationBarItem
+-(void)addNavigationItem:(UIView*)v tag:(int)tag{
+    CGSize vSize                = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
+    CGFloat originX             = (SCREEN_SIZE.width/2 - vSize.width/2) + self.subviews.count*(100 + self.navigationSideItemsStyle);
+    v.frame                     = (CGRect){originX, 8, vSize.width, vSize.height};
+    v.tag                       = tag;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(tapOnHeader:)];
+    [v addGestureRecognizer:tap];
+    [v setUserInteractionEnabled:YES];
+    [_navigationBarView addSubview:v];
+    if(!_subviews)
+        _subviews = [[NSMutableArray alloc] init];
+    [_subviews addObject:v];
+}
 
 -(void)setupPagingProcess{
     // Make our ScrollView

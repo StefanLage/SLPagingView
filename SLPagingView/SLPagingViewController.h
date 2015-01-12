@@ -52,7 +52,7 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
 /*
  *  Contains all views displayed
  */
-@property (nonatomic, strong) NSDictionary *viewControllers;
+@property (nonatomic, strong) NSMutableDictionary *viewControllers;
 /*
  *  Tint color of the page control
  */
@@ -199,5 +199,13 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
  *  @param animated animate the moving
  */
 -(void)setCurrentIndex:(NSInteger)index animated:(BOOL)animated;
+
+/*
+ *  Add a controller to the stack and refresh the UI if needed
+ *
+ *  @param controller you would like to add to the stack
+ *  @param refresh the UI ?
+ */
+-(void)addViewControllers:(UIViewController *) controller needToRefresh:(BOOL) refresh;
 
 @end
