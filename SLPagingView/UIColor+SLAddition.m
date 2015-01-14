@@ -2,7 +2,7 @@
 //  UIColor+SLAddition.m
 //  TinderLike
 //
-//  Created by kingsoft_ios on 15/1/14.
+//  Created by Stefan Lage on 15/1/14.
 //  Copyright (c) 2015年 Stefan Lage. All rights reserved.
 //
 
