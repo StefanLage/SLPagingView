@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F7B96BA61A663FC0005DB7A9 /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B96BA51A663FC0005DB7A9 /* UIColor+SLAddition.m */; };
 		F82198631A2373CC00BDF49B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F82198621A2373CC00BDF49B /* main.m */; };
 		F82198661A2373CC00BDF49B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F82198651A2373CC00BDF49B /* AppDelegate.m */; };
 		F821987D1A2373CC00BDF49B /* TwitterLikeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F821987C1A2373CC00BDF49B /* TwitterLikeTests.m */; };
@@ -26,6 +27,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F7B96BA41A663FC0005DB7A9 /* UIColor+SLAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+SLAddition.h"; path = "../../SLPagingView/UIColor+SLAddition.h"; sourceTree = "<group>"; };
+		F7B96BA51A663FC0005DB7A9 /* UIColor+SLAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+SLAddition.m"; path = "../../SLPagingView/UIColor+SLAddition.m"; sourceTree = "<group>"; };
 		F821985D1A2373CC00BDF49B /* TwitterLike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterLike.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F82198611A2373CC00BDF49B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F82198621A2373CC00BDF49B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -122,6 +125,8 @@
 			children = (
 				F82198881A23748100BDF49B /* SLPagingViewController.h */,
 				F82198891A23748100BDF49B /* SLPagingViewController.m */,
+				F7B96BA41A663FC0005DB7A9 /* UIColor+SLAddition.h */,
+				F7B96BA51A663FC0005DB7A9 /* UIColor+SLAddition.m */,
 			);
 			name = SLPagingView;
 			sourceTree = "<group>";
@@ -228,6 +233,7 @@
 			files = (
 				F82198661A2373CC00BDF49B /* AppDelegate.m in Sources */,
 				F82198631A2373CC00BDF49B /* main.m in Sources */,
+				F7B96BA61A663FC0005DB7A9 /* UIColor+SLAddition.m in Sources */,
 				F821988A1A23748100BDF49B /* SLPagingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
