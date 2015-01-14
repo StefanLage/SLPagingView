@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F7B96BA31A663F80005DB7A9 /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B96BA21A663F80005DB7A9 /* UIColor+SLAddition.m */; };
 		F8E1581F1A63DD6100AA1A2E /* SLPagingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E1581E1A63DD6100AA1A2E /* SLPagingViewController.m */; };
 		F8E1582D1A64373600AA1A2E /* ChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E158281A64373600AA1A2E /* ChatController.m */; };
 		F8E1582E1A64373600AA1A2E /* ProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E1582A1A64373600AA1A2E /* ProfileController.m */; };
@@ -30,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F7B96BA11A663F80005DB7A9 /* UIColor+SLAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+SLAddition.h"; path = "../../SLPagingView/UIColor+SLAddition.h"; sourceTree = "<group>"; };
+		F7B96BA21A663F80005DB7A9 /* UIColor+SLAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+SLAddition.m"; path = "../../SLPagingView/UIColor+SLAddition.m"; sourceTree = "<group>"; };
 		F8E157F31A63DD3C00AA1A2E /* TinderStoryboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderStoryboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E1581D1A63DD6100AA1A2E /* SLPagingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLPagingViewController.h; path = ../../SLPagingView/SLPagingViewController.h; sourceTree = "<group>"; };
 		F8E1581E1A63DD6100AA1A2E /* SLPagingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLPagingViewController.m; path = ../../SLPagingView/SLPagingViewController.m; sourceTree = "<group>"; };
@@ -50,13 +53,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		F8E157F01A63DD3C00AA1A2E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F8E158091A63DD3D00AA1A2E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -112,6 +108,8 @@
 			children = (
 				F8E1581D1A63DD6100AA1A2E /* SLPagingViewController.h */,
 				F8E1581E1A63DD6100AA1A2E /* SLPagingViewController.m */,
+				F7B96BA11A663F80005DB7A9 /* UIColor+SLAddition.h */,
+				F7B96BA21A663F80005DB7A9 /* UIColor+SLAddition.m */,
 			);
 			name = SLPagingView;
 			sourceTree = "<group>";
@@ -161,10 +159,6 @@
 					F8E157F21A63DD3C00AA1A2E = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
-					F8E1580B1A63DD3D00AA1A2E = {
-						CreatedOnToolsVersion = 6.1.1;
-						TestTargetID = F8E157F21A63DD3C00AA1A2E;
-					};
 				};
 			};
 			buildConfigurationList = F8E157EE1A63DD3C00AA1A2E /* Build configuration list for PBXProject "TinderStoryboard" */;
@@ -197,13 +191,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F8E1580A1A63DD3D00AA1A2E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -217,25 +204,11 @@
 				F8E1581F1A63DD6100AA1A2E /* SLPagingViewController.m in Sources */,
 				F8E158381A64378000AA1A2E /* main.m in Sources */,
 				F8E158331A64374D00AA1A2E /* AppDelegate.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F8E158081A63DD3D00AA1A2E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				F7B96BA31A663F80005DB7A9 /* UIColor+SLAddition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		F8E1580E1A63DD3D00AA1A2E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F8E157F21A63DD3C00AA1A2E /* TinderStoryboard */;
-			targetProxy = F8E1580D1A63DD3D00AA1A2E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F8E158391A64379200AA1A2E /* LaunchScreen.xib */ = {
