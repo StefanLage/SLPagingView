@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "SLPagingViewController.h"
+#import "UIColor+SLAddition.h"
 
 @interface AppDelegate ()
 
@@ -39,19 +40,19 @@
             if(v.frame.origin.x > 45
                && v.frame.origin.x < 145)
                 // Left part
-                c = [self gradient:v.frame.origin.x
-                               top:46
-                            bottom:144
-                              init:orange
-                              goal:gray];
+                c = [UIColor gradient:v.frame.origin.x
+                                  top:46
+                               bottom:144
+                                 init:orange
+                                 goal:gray];
             else if(v.frame.origin.x > 145
                     && v.frame.origin.x < 245)
                 // Right part
-                c = [self gradient:v.frame.origin.x
-                               top:146
-                            bottom:244
-                              init:gray
-                              goal:orange];
+                c = [UIColor gradient:v.frame.origin.x
+                                  top:146
+                               bottom:244
+                                 init:gray
+                                 goal:orange];
             else if(v.frame.origin.x == 145)
                 c = orange;
             v.tintColor= c;
@@ -82,21 +83,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
--(UIColor *)gradient:(double)percent top:(double)topX bottom:(double)bottomX init:(UIColor*)init goal:(UIColor*)goal{
-    double t = (percent - bottomX) / (topX - bottomX);
-    
-    t = MAX(0.0, MIN(t, 1.0));
-    
-    const CGFloat *cgInit = CGColorGetComponents(init.CGColor);
-    const CGFloat *cgGoal = CGColorGetComponents(goal.CGColor);
-    
-    double r = cgInit[0] + t * (cgGoal[0] - cgInit[0]);
-    double g = cgInit[1] + t * (cgGoal[1] - cgInit[1]);
-    double b = cgInit[2] + t * (cgGoal[2] - cgInit[2]);
-    
-    return [UIColor colorWithRed:r green:g blue:b alpha:1];
 }
 
 @end
