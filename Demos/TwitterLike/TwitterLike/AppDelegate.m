@@ -54,15 +54,17 @@
     
     // Twitter Like
     pageViewController.pagingViewMovingRedefine = ^(UIScrollView *scrollView, NSArray *subviews){
+        float mid   = [UIScreen mainScreen].bounds.size.width/2 - 45.0;
+        float width = [UIScreen mainScreen].bounds.size.width;
         CGFloat xOffset = scrollView.contentOffset.x;
         int i = 0;
         for(UILabel *v in subviews){
             CGFloat alpha = 0.0;
-            if(v.frame.origin.x < 145)
-                alpha = 1 - (xOffset - i*320) / 320;
-            else if(v.frame.origin.x >145)
-                alpha=(xOffset - i*320) / 320 + 1;
-            else if(v.frame.origin.x == 140)
+            if(v.frame.origin.x < mid)
+                alpha = 1 - (xOffset - i*width) / width;
+            else if(v.frame.origin.x >mid)
+                alpha=(xOffset - i*width) / width + 1;
+            else if(v.frame.origin.x == mid-5)
                 alpha = 1.0;
             i++;
             v.alpha = alpha;

@@ -15,7 +15,7 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIPageControl *pageControl;
 @property (nonatomic, strong) UIView *navigationBarView;
-@property (nonatomic, strong) NSMutableArray *subviews;
+@property (nonatomic, strong) NSMutableArray *navItemsViews;
 @property (nonatomic) BOOL needToShowPageControl;
 @property (nonatomic) BOOL isUserInteraction;
 @property (nonatomic) NSInteger indexSelected;
@@ -27,7 +27,8 @@
 -(id)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
     if(self){
-        [self initCrucialObjects:[UIColor whiteColor]];
+        [self initCrucialObjects:[UIColor whiteColor]
+                 showPageControl:NO];
     }
     return self;
 }
@@ -51,7 +52,8 @@
 -(id)initWithNavBarItems:(NSArray*)items navBarBackground:(UIColor*)background views:(NSArray*)views showPageControl:(BOOL)addPageControl{
     self = [super init];
     if(self){
-        [self initCrucialObjects:background];
+        [self initCrucialObjects:background
+                 showPageControl:addPageControl];
         int i                         = 0;
         for(i=0; i<items.count; i++){
             // Be sure items contains only UIView's object
@@ -166,6 +168,13 @@
     [self setupPagingProcess];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    // Be notify when the device's orientation change
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(orientationChanged:)
+                                                 name:UIDeviceOrientationDidChangeNotification  object:nil];
+}
+
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self setCurrentIndex:self.indexSelected
@@ -229,8 +238,8 @@
 
 #pragma mark - Internal methods
 
--(void) initCrucialObjects:(UIColor *)background{
-    _needToShowPageControl             = NO;
+-(void) initCrucialObjects:(UIColor *)background showPageControl:(BOOL) showPageControl{
+    _needToShowPageControl             = showPageControl;
     _navigationBarView                 = [[UIView alloc] init];
     _navigationBarView.backgroundColor = background;
     // UserInteraction activate by default
@@ -238,7 +247,7 @@
     // Default value for the navigation style
     _navigationSideItemsStyle          = SLNavigationSideItemsStyleDefault;
     _viewControllers                   = [NSMutableDictionary new];
-    _subviews                          = [NSMutableArray new];
+    _navItemsViews                     = [NSMutableArray new];
 }
 
 // Load any defined controllers from the storyboard
@@ -266,7 +275,7 @@
 -(void)addNavigationItem:(UIView*)v tag:(int)tag{
     CGFloat distance            = (SCREEN_SIZE.width/2) - self.navigationSideItemsStyle;
     CGSize vSize                = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
-    CGFloat originX             = (SCREEN_SIZE.width/2 - vSize.width/2) + self.subviews.count*distance;
+    CGFloat originX             = (SCREEN_SIZE.width/2 - vSize.width/2) + self.navItemsViews.count*distance;
     v.frame                     = (CGRect){originX, 8, vSize.width, vSize.height};
     v.tag                       = tag;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
@@ -274,9 +283,9 @@
     [v addGestureRecognizer:tap];
     [v setUserInteractionEnabled:YES];
     [_navigationBarView addSubview:v];
-    if(!_subviews)
-        _subviews = [[NSMutableArray alloc] init];
-    [_subviews addObject:v];
+    if(!_navItemsViews)
+        _navItemsViews = [[NSMutableArray alloc] init];
+    [_navItemsViews addObject:v];
 }
 
 -(void)setupPagingProcess{
@@ -317,7 +326,7 @@
         self.scrollView.contentSize = (CGSize){width, height};
         __block int i               = 0;
         [self.viewControllers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            UIView *v = [self.viewControllers objectForKey:key];
+            UIView *v = (UIView*)obj;
             v.frame   = (CGRect){SCREEN_SIZE.width * i, 0, SCREEN_SIZE.width, CGRectGetHeight(self.view.frame)};
             [self.scrollView addSubview:v];
             i++;
@@ -339,37 +348,83 @@
     return [[lbl text] sizeWithAttributes:@{NSFontAttributeName:[lbl font]}];;
 }
 
+#pragma mark - Internal Methods
+#pragma mark - Views management
+
+/* Update scrollview's properties:
+ - frame in terms of SCREEN_SIZE
+ - contentSize
+ */
+-(void)updateScrollView{
+    float nWidth                = SCREEN_SIZE.width * self.scrollView.subviews.count;
+    float nHeight               = CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.navigationBarView.frame);
+    self.scrollView.frame       = (CGRect){0, 0, SCREEN_SIZE.width, SCREEN_SIZE.height};
+    self.scrollView.contentSize = (CGSize){nWidth, nHeight};
+}
+
+/* Update all nav items frame
+ *
+ * @param xOffset, abscissa of the scrollview's contentOffset
+ */
+-(void)updateNavItems:(CGFloat) xOffset{
+    __block int i = 0;
+    [self.navItemsViews enumerateObjectsUsingBlock:^(UIView* v, NSUInteger idx, BOOL *stop) {
+        CGFloat distance = (SCREEN_SIZE.width/2) - self.navigationSideItemsStyle;
+        CGSize vSize     = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
+        CGFloat originX  = ((SCREEN_SIZE.width/2 - vSize.width/2) + i*distance) - xOffset/(SCREEN_SIZE.width/distance);
+        v.frame          = (CGRect){originX, 8, vSize.width, vSize.height};
+        i++;
+    }];
+}
+
+// Adapt all views the main screen
+-(void)adaptViews{
+    // Update the nav items + the scrollview
+    [self updateNavItems:self.scrollView.contentOffset.x];
+    [self updateScrollView];
+    // Adapt each subviews
+    __block int i = 0;
+    [self.scrollView.subviews enumerateObjectsUsingBlock:^(UIView* v, NSUInteger idx, BOOL *stop) {
+        v.frame = CGRectMake(SCREEN_SIZE.width * i, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+        i++;
+    }];
+    // Be sure to stay on the same view
+    [self setCurrentIndex:self.indexSelected
+                 animated:NO];
+}
+
+#pragma mark - Internal Methods
+#pragma mark - Notifications
+
+// Call when the screen orientation is updated
+- (void)orientationChanged:(NSNotification *)notification{
+    [self adaptViews];
+}
+
 #pragma mark - SLPagingViewDidChanged delegate
 
 -(void)sendNewIndex:(UIScrollView *)scrollView{
-    CGFloat xOffset              = scrollView.contentOffset.x;
-    int currentIndex             = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
-    if (self.pageControl.currentPage != currentIndex)
+    CGFloat xOffset    = scrollView.contentOffset.x;
+    self.indexSelected = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
+    if (self.pageControl.currentPage != self.indexSelected)
     {
-        self.pageControl.currentPage = currentIndex;
+        self.pageControl.currentPage = self.indexSelected;
         if(self.didChangedPage)
-            self.didChangedPage(currentIndex);
+            self.didChangedPage(self.indexSelected);
     }
 }
 
 #pragma mark - ScrollView delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat xOffset = scrollView.contentOffset.x;
-    int i = 0;
-    for(UIView *v in self.subviews){
-        CGFloat distance = (SCREEN_SIZE.width/2) - self.navigationSideItemsStyle;
-        CGSize vSize     = ([v isKindOfClass:[UILabel class]])? [self getLabelSize:(UILabel*)v] : v.frame.size;
-        CGFloat originX  = ((SCREEN_SIZE.width/2 - vSize.width/2) + i*distance) - xOffset/(SCREEN_SIZE.width/distance);
-        v.frame          = (CGRect){originX, 8, vSize.width, vSize.height};
-        i++;
-    }
+    // Update nav items
+    [self updateNavItems:scrollView.contentOffset.x];
     if(self.pagingViewMoving)
         // Customize the navigation items
-        self.pagingViewMoving(self.subviews);
+        self.pagingViewMoving(self.navItemsViews);
     if(self.pagingViewMovingRedefine)
         // Wants to redefine all behaviors
-        self.pagingViewMovingRedefine(scrollView, self.subviews);
+        self.pagingViewMovingRedefine(scrollView, self.navItemsViews);
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -397,6 +452,5 @@ NSString * const SLPagingViewPrefixIdentifier = @"sl_";
         [src addViewControllers:self.destinationViewController
                   needToRefresh:NO];
 }
-
 
 @end
