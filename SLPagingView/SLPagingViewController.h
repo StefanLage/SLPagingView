@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Stefan Lage. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ShareResources.h"
+#import "UIScrollView+UpdateContentSize.h"
 
 typedef NS_ENUM(NSInteger, SLNavigationSideItemsStyle) {
     SLNavigationSideItemsStyleOnBounds = 20,

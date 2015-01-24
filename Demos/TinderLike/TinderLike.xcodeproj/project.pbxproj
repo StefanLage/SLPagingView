@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F7B96BA01A663F0F005DB7A9 /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B96B9F1A663F0F005DB7A9 /* UIColor+SLAddition.m */; };
+		F8C7A99A1A731EEE004AF72A /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C7A9971A731EEE004AF72A /* UIColor+SLAddition.m */; };
+		F8C7A99B1A731EEE004AF72A /* UIScrollView+UpdateContentSize.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C7A9991A731EEE004AF72A /* UIScrollView+UpdateContentSize.m */; };
 		F8E86B881A24BBA700E15006 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E86B871A24BBA700E15006 /* main.m */; };
 		F8E86B8B1A24BBA700E15006 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E86B8A1A24BBA700E15006 /* AppDelegate.m */; };
 		F8E86B931A24BBA700E15006 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8E86B921A24BBA700E15006 /* Images.xcassets */; };
@@ -27,8 +28,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F7B96B9E1A663F0F005DB7A9 /* UIColor+SLAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+SLAddition.h"; path = "../../SLPagingView/UIColor+SLAddition.h"; sourceTree = "<group>"; };
-		F7B96B9F1A663F0F005DB7A9 /* UIColor+SLAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+SLAddition.m"; path = "../../SLPagingView/UIColor+SLAddition.m"; sourceTree = "<group>"; };
+		F8C7A9951A731EE1004AF72A /* ShareResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareResources.h; path = ../../SLPagingView/ShareResources.h; sourceTree = "<group>"; };
+		F8C7A9961A731EEE004AF72A /* UIColor+SLAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+SLAddition.h"; path = "../../SLPagingView/Categories/UIColor+SLAddition.h"; sourceTree = "<group>"; };
+		F8C7A9971A731EEE004AF72A /* UIColor+SLAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+SLAddition.m"; path = "../../SLPagingView/Categories/UIColor+SLAddition.m"; sourceTree = "<group>"; };
+		F8C7A9981A731EEE004AF72A /* UIScrollView+UpdateContentSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+UpdateContentSize.h"; path = "../../SLPagingView/Categories/UIScrollView+UpdateContentSize.h"; sourceTree = "<group>"; };
+		F8C7A9991A731EEE004AF72A /* UIScrollView+UpdateContentSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+UpdateContentSize.m"; path = "../../SLPagingView/Categories/UIScrollView+UpdateContentSize.m"; sourceTree = "<group>"; };
 		F8E86B821A24BBA700E15006 /* TinderLike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderLike.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E86B861A24BBA700E15006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F8E86B871A24BBA700E15006 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -123,10 +127,13 @@
 		F8E86BAE1A24BC8C00E15006 /* SLPagingView */ = {
 			isa = PBXGroup;
 			children = (
+				F8C7A9961A731EEE004AF72A /* UIColor+SLAddition.h */,
+				F8C7A9971A731EEE004AF72A /* UIColor+SLAddition.m */,
+				F8C7A9981A731EEE004AF72A /* UIScrollView+UpdateContentSize.h */,
+				F8C7A9991A731EEE004AF72A /* UIScrollView+UpdateContentSize.m */,
+				F8C7A9951A731EE1004AF72A /* ShareResources.h */,
 				F8E86BAF1A24BCA300E15006 /* SLPagingViewController.h */,
 				F8E86BB01A24BCA300E15006 /* SLPagingViewController.m */,
-				F7B96B9E1A663F0F005DB7A9 /* UIColor+SLAddition.h */,
-				F7B96B9F1A663F0F005DB7A9 /* UIColor+SLAddition.m */,
 			);
 			name = SLPagingView;
 			sourceTree = "<group>";
@@ -231,8 +238,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8E86B8B1A24BBA700E15006 /* AppDelegate.m in Sources */,
+				F8C7A99B1A731EEE004AF72A /* UIScrollView+UpdateContentSize.m in Sources */,
 				F8E86B881A24BBA700E15006 /* main.m in Sources */,
-				F7B96BA01A663F0F005DB7A9 /* UIColor+SLAddition.m in Sources */,
+				F8C7A99A1A731EEE004AF72A /* UIColor+SLAddition.m in Sources */,
 				F8E86BB11A24BCA300E15006 /* SLPagingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

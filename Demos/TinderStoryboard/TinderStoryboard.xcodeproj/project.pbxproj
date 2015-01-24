@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F7B96BA31A663F80005DB7A9 /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B96BA21A663F80005DB7A9 /* UIColor+SLAddition.m */; };
+		F8C7A9931A731DA5004AF72A /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C7A9901A731DA5004AF72A /* UIColor+SLAddition.m */; };
+		F8C7A9941A731DA5004AF72A /* UIScrollView+UpdateContentSize.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C7A9921A731DA5004AF72A /* UIScrollView+UpdateContentSize.m */; };
 		F8E1581F1A63DD6100AA1A2E /* SLPagingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E1581E1A63DD6100AA1A2E /* SLPagingViewController.m */; };
 		F8E1582D1A64373600AA1A2E /* ChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E158281A64373600AA1A2E /* ChatController.m */; };
 		F8E1582E1A64373600AA1A2E /* ProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E1582A1A64373600AA1A2E /* ProfileController.m */; };
@@ -20,19 +21,12 @@
 		F8E1583E1A64379200AA1A2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8E1583B1A64379200AA1A2E /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		F8E1580D1A63DD3D00AA1A2E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F8E157EB1A63DD3C00AA1A2E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F8E157F21A63DD3C00AA1A2E;
-			remoteInfo = TinderStoryboard;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		F7B96BA11A663F80005DB7A9 /* UIColor+SLAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+SLAddition.h"; path = "../../SLPagingView/UIColor+SLAddition.h"; sourceTree = "<group>"; };
-		F7B96BA21A663F80005DB7A9 /* UIColor+SLAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+SLAddition.m"; path = "../../SLPagingView/UIColor+SLAddition.m"; sourceTree = "<group>"; };
+		F8C7A98E1A731D9D004AF72A /* ShareResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareResources.h; path = ../../SLPagingView/ShareResources.h; sourceTree = "<group>"; };
+		F8C7A98F1A731DA5004AF72A /* UIColor+SLAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+SLAddition.h"; path = "../../SLPagingView/Categories/UIColor+SLAddition.h"; sourceTree = "<group>"; };
+		F8C7A9901A731DA5004AF72A /* UIColor+SLAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+SLAddition.m"; path = "../../SLPagingView/Categories/UIColor+SLAddition.m"; sourceTree = "<group>"; };
+		F8C7A9911A731DA5004AF72A /* UIScrollView+UpdateContentSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+UpdateContentSize.h"; path = "../../SLPagingView/Categories/UIScrollView+UpdateContentSize.h"; sourceTree = "<group>"; };
+		F8C7A9921A731DA5004AF72A /* UIScrollView+UpdateContentSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+UpdateContentSize.m"; path = "../../SLPagingView/Categories/UIScrollView+UpdateContentSize.m"; sourceTree = "<group>"; };
 		F8E157F31A63DD3C00AA1A2E /* TinderStoryboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderStoryboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E1581D1A63DD6100AA1A2E /* SLPagingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SLPagingViewController.h; path = ../../SLPagingView/SLPagingViewController.h; sourceTree = "<group>"; };
 		F8E1581E1A63DD6100AA1A2E /* SLPagingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SLPagingViewController.m; path = ../../SLPagingView/SLPagingViewController.m; sourceTree = "<group>"; };
@@ -90,7 +84,6 @@
 				F8E158231A64337C00AA1A2E /* Controllers */,
 				F8E157F61A63DD3C00AA1A2E /* Supporting Files */,
 			);
-			name = TinderStoryboard;
 			path = TinderStoryboard;
 			sourceTree = "<group>";
 		};
@@ -106,10 +99,13 @@
 		F8E1581C1A63DD5000AA1A2E /* SLPagingView */ = {
 			isa = PBXGroup;
 			children = (
+				F8C7A98F1A731DA5004AF72A /* UIColor+SLAddition.h */,
+				F8C7A9901A731DA5004AF72A /* UIColor+SLAddition.m */,
+				F8C7A9911A731DA5004AF72A /* UIScrollView+UpdateContentSize.h */,
+				F8C7A9921A731DA5004AF72A /* UIScrollView+UpdateContentSize.m */,
+				F8C7A98E1A731D9D004AF72A /* ShareResources.h */,
 				F8E1581D1A63DD6100AA1A2E /* SLPagingViewController.h */,
 				F8E1581E1A63DD6100AA1A2E /* SLPagingViewController.m */,
-				F7B96BA11A663F80005DB7A9 /* UIColor+SLAddition.h */,
-				F7B96BA21A663F80005DB7A9 /* UIColor+SLAddition.m */,
 			);
 			name = SLPagingView;
 			sourceTree = "<group>";
@@ -204,7 +200,8 @@
 				F8E1581F1A63DD6100AA1A2E /* SLPagingViewController.m in Sources */,
 				F8E158381A64378000AA1A2E /* main.m in Sources */,
 				F8E158331A64374D00AA1A2E /* AppDelegate.m in Sources */,
-				F7B96BA31A663F80005DB7A9 /* UIColor+SLAddition.m in Sources */,
+				F8C7A9941A731DA5004AF72A /* UIScrollView+UpdateContentSize.m in Sources */,
+				F8C7A9931A731DA5004AF72A /* UIColor+SLAddition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
