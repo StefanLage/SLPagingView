@@ -14,6 +14,7 @@
 @property (nonatomic, strong) UIPageControl *pageControl;
 @property (nonatomic, strong) UIView *navigationBarView;
 @property (nonatomic, strong) NSMutableArray *navItemsViews;
+@property (nonatomic, strong) NSMutableArray *controllerReferences;
 @property (nonatomic) BOOL needToShowPageControl;
 @property (nonatomic) BOOL isUserInteraction;
 @property (nonatomic) NSInteger indexSelected;
@@ -110,6 +111,7 @@
 -(id)initWithNavBarControllers:(NSArray *)controllers navBarBackground:(UIColor *)background showPageControl:(BOOL)addPageControl{
     NSMutableArray *views = [[NSMutableArray alloc] initWithCapacity:controllers.count];
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:controllers.count];
+    _controllerReferences = [[NSMutableArray alloc] initWithArray:controllers];
     for(int i =0; i<controllers.count; i++){
         // Be sure we got s subclass of UIViewController
         if([controllers[i] isKindOfClass:UIViewController.class]){
@@ -145,6 +147,7 @@
 
 -(id)initWithNavBarItems:(NSArray *)items navBarBackground:(UIColor *)background controllers:(NSArray *)controllers showPageControl:(BOOL)addPageControl{
     NSMutableArray *views = [[NSMutableArray alloc] initWithCapacity:controllers.count];
+    _controllerReferences = [[NSMutableArray alloc] initWithArray:controllers];
     for(int i =0; i<controllers.count; i++){
         // Be sure we got s subclass of UIViewController
         if([controllers[i] isKindOfClass:UIViewController.class])
@@ -160,6 +163,10 @@
 
 - (void)loadView {
     [super loadView];
+    // Notify all conctrollers
+    [self notifyControllers:NSSelectorFromString(@"loadView")
+                     object:nil
+                 checkIndex:NO];
     // Try to load controller from storyboard
     [self loadStoryboardControllers];
     // Set up the controller
@@ -167,15 +174,40 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     // Be notify when the device's orientation change
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(orientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
+    // Notify all conctrollers
+    [self notifyControllers:NSSelectorFromString(@"viewDidAppear:")
+                     object:@(animated)
+                 checkIndex:YES];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    // Notify all conctrollers
+    [self notifyControllers:NSSelectorFromString(@"viewDidAppear:")
+                     object:@(animated)
+                 checkIndex:YES];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    // Notify all conctrollers
+    [self notifyControllers:NSSelectorFromString(@"viewWillDisappear:")
+                     object:@(animated)
+                 checkIndex:YES];
 }
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    // Notify all conctrollers
+    [self notifyControllers:NSSelectorFromString(@"viewDidLoad")
+                     object:nil
+                 checkIndex:NO];
     [self setCurrentIndex:self.indexSelected
                  animated:NO];
 }
@@ -240,6 +272,8 @@
     // Save the controller
     [self.viewControllers setObject:controller.view
                              forKey:@(tag)];
+    // Save controller reference
+    [self.controllerReferences addObject:controller];
     // Do we need to refresh the UI ?
     if(refresh)
        [self setupPagingProcess];
@@ -257,6 +291,7 @@
     _navigationSideItemsStyle          = SLNavigationSideItemsStyleDefault;
     _viewControllers                   = [NSMutableDictionary new];
     _navItemsViews                     = [NSMutableArray new];
+    _controllerReferences              = [NSMutableArray new];
 }
 
 // Load any defined controllers from the storyboard
@@ -277,6 +312,22 @@
                 isThereNextIdentifier = NO;
             }
         }
+    }
+}
+
+// Perform a specific selector for each controllers
+-(void)notifyControllers:(SEL)selector object:(id)object checkIndex:(BOOL)index{
+    if(index && self.controllerReferences.count > self.indexSelected) {
+        [(UIViewController*)self.controllerReferences[self.indexSelected] performSelectorOnMainThread:selector
+                                                                                           withObject:object
+                                                                                        waitUntilDone:NO];
+    }
+    else{
+        [self.controllerReferences enumerateObjectsUsingBlock:^(UIViewController* ctr, NSUInteger idx, BOOL *stop) {
+            [ctr performSelectorOnMainThread:selector
+                                  withObject:object
+                               waitUntilDone:NO];
+        }];
     }
 }
 
@@ -443,6 +494,10 @@
         if(self.didChangedPage)
             self.didChangedPage(self.indexSelected);
     }
+    // Try to notify the controller concerned
+    [self notifyControllers:NSSelectorFromString(@"viewDidAppear:")
+                     object:@(YES)
+                 checkIndex:YES];
 }
 
 #pragma mark - ScrollView delegate
