@@ -488,9 +488,15 @@
 -(void)sendNewIndex:(UIScrollView *)scrollView{
     CGFloat xOffset    = scrollView.contentOffset.x;
     self.indexSelected = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
-    if (self.pageControl.currentPage != self.indexSelected)
-    {
-        self.pageControl.currentPage = self.indexSelected;
+    if(self.pageControl){
+        if (self.pageControl.currentPage != self.indexSelected)
+        {
+            self.pageControl.currentPage = self.indexSelected;
+            if(self.didChangedPage)
+                self.didChangedPage(self.indexSelected);
+        }
+    }
+    else{
         if(self.didChangedPage)
             self.didChangedPage(self.indexSelected);
     }
