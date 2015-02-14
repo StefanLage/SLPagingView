@@ -350,28 +350,17 @@
 
 -(void)setupPagingProcess{
     // Make our ScrollView
-    self.scrollView                                           = [UIScrollView new];
+    CGRect frame                                              = CGRectMake(0, 0, SCREEN_SIZE.width, self.view.bounds.size.height);
+    self.scrollView                                           = [[UIScrollView alloc] initWithFrame:frame];
     self.scrollView.backgroundColor                           = [UIColor clearColor];
     self.scrollView.pagingEnabled                             = YES;
     self.scrollView.showsHorizontalScrollIndicator            = NO;
     self.scrollView.showsVerticalScrollIndicator              = NO;
     self.scrollView.delegate                                  = self;
     self.scrollView.bounces                                   = NO;
-    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.scrollView setContentInset:UIEdgeInsetsMake(0, 0, -80, 0)];
     [self.view addSubview:self.scrollView];
     
-    // setup scrollview constraints
-    // Width constraint, equal parent view width
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"scrollView": self.scrollView}]];
-    // Height constraint, equal parent view height
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"scrollView": self.scrollView}]];
     // Adds all views
     [self addControllers];
     
@@ -393,41 +382,54 @@
     if(self.viewControllers
        && self.viewControllers.count > 0){
         float width                 = SCREEN_SIZE.width * self.viewControllers.count;
-        float height                = CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.navigationBarView.frame);
+        float height                = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.navigationBarView.bounds);
         self.scrollView.contentSize = (CGSize){width, height};
+        __block int i = 0;
         [self.viewControllers enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *stop) {
             UIView *v = (UIView*)obj;
             [self.scrollView addSubview:v];
-            v.translatesAutoresizingMaskIntoConstraints = NO;
-            // Width constraint, half of parent view width
-            [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:v
-                                                                        attribute:NSLayoutAttributeWidth
-                                                                        relatedBy:NSLayoutRelationEqual
-                                                                           toItem:self.scrollView
-                                                                        attribute:NSLayoutAttributeWidth
-                                                                       multiplier:1.0
-                                                                         constant:0]];
-            // Height constraint, half of parent view height
-            [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:v
-                                                                        attribute:NSLayoutAttributeHeight
-                                                                        relatedBy:NSLayoutRelationEqual
-                                                                           toItem:self.scrollView
-                                                                        attribute:NSLayoutAttributeHeight
-                                                                       multiplier:1.0
-                                                                         constant:0]];
-            UIView *previous = [self.viewControllers objectForKey:[NSNumber numberWithFloat:([key intValue] - 1)]];
-            if(previous)
-                // Distance constraint: set distance between previous view and the current one
-                [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[previous]-0-[v]"
+            if([self useAutoLayout:v]){
+                // Using AutoLayout
+                v.translatesAutoresizingMaskIntoConstraints = NO;
+                // Width constraint, half of parent view width
+                [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:v
+                                                                            attribute:NSLayoutAttributeWidth
+                                                                            relatedBy:NSLayoutRelationEqual
+                                                                               toItem:self.scrollView
+                                                                            attribute:NSLayoutAttributeWidth
+                                                                           multiplier:1.0
+                                                                             constant:0]];
+                // Height constraint, half of parent view height
+                [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:v
+                                                                            attribute:NSLayoutAttributeHeight
+                                                                            relatedBy:NSLayoutRelationEqual
+                                                                               toItem:self.scrollView
+                                                                            attribute:NSLayoutAttributeHeight
+                                                                           multiplier:1.0
+                                                                             constant:0]];
+                UIView *previous = [self.viewControllers objectForKey:[NSNumber numberWithFloat:([key intValue] - 1)]];
+                if(previous)
+                    // Distance constraint: set distance between previous view and the current one
+                    [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[previous]-0-[v]"
+                                                                                            options:0
+                                                                                            metrics:nil
+                                                                                              views:@{@"v" : v, @"previous" : previous}]];
+                else
+                    // First view
+                    [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[v]"
+                                                                                            options:0
+                                                                                            metrics:nil
+                                                                                              views:@{@"v" : v }]];
+                // Oridnate constraint : set the space between the Top and the current view
+                [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[v]", CGRectGetHeight(self.navigationBarView.frame)]
                                                                                         options:0
                                                                                         metrics:nil
-                                                                                          views:@{@"v" : v,
-                                                                                                  @"previous" : previous}]];
-            // Oridnate constraint : set the space between the Top and the current view
-            [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[v]", CGRectGetHeight(self.navigationBarView.frame)]
-                                                                                    options:0
-                                                                                    metrics:nil
-                                                                                      views:@{@"v" : v}]];
+                                                                                          views:@{@"v" : v}]];
+                }
+            else{
+                v.frame = (CGRect){SCREEN_SIZE.width * i, 0, SCREEN_SIZE.width, CGRectGetHeight(self.view.frame)};
+                i++;
+            }
         }];
     }
 }
@@ -444,6 +446,13 @@
 
 -(CGSize) getLabelSize:(UILabel *)lbl{
     return [[lbl text] sizeWithAttributes:@{NSFontAttributeName:[lbl font]}];;
+}
+
+/**
+ *  Check whether the app use Auto Layout
+ */
+-(BOOL)useAutoLayout:(UIView*)someView{
+    return someView.constraints.count;
 }
 
 #pragma mark - Internal Methods
