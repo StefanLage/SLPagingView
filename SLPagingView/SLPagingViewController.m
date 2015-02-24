@@ -385,8 +385,19 @@
         float height                = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.navigationBarView.bounds);
         self.scrollView.contentSize = (CGSize){width, height};
         __block int i = 0;
-        [self.viewControllers enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *stop) {
-            UIView *v = (UIView*)obj;
+        // Sort all keys in ascending
+        NSArray *sortedIndexes = [self.viewControllers.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSNumber *key1, NSNumber *key2) {
+            if ([key1 integerValue] > [key2 integerValue]) {
+                return (NSComparisonResult)NSOrderedDescending;
+            }
+            if ([key1 integerValue] < [key2 integerValue]) {
+                return (NSComparisonResult)NSOrderedAscending;
+            }
+            return (NSComparisonResult)NSOrderedSame;
+        }];
+
+        [sortedIndexes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            UIView *v = self.viewControllers[@(idx)];
             [self.scrollView addSubview:v];
             if([self useAutoLayout:v]){
                 // Using AutoLayout
@@ -407,7 +418,7 @@
                                                                             attribute:NSLayoutAttributeHeight
                                                                            multiplier:1.0
                                                                              constant:0]];
-                UIView *previous = [self.viewControllers objectForKey:[NSNumber numberWithFloat:([key intValue] - 1)]];
+                UIView *previous = [self.viewControllers objectForKey:[NSNumber numberWithFloat:(idx - 1)]];
                 if(previous)
                     // Distance constraint: set distance between previous view and the current one
                     [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[previous]-0-[v]"
