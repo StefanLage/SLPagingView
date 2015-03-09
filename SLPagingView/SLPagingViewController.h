@@ -209,6 +209,13 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
  */
 -(void)addViewControllers:(UIViewController *) controller needToRefresh:(BOOL) refresh;
 
+/**
+ *  Allows to update the navigationBar's background color
+ *
+ *  @param color
+ */
+-(void)setNavigationBarColor:(UIColor*) color;
+
 @end
 
 extern NSString* const SLPagingViewPrefixIdentifier;  // this is @"sl_"

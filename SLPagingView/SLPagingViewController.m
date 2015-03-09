@@ -279,6 +279,11 @@
        [self setupPagingProcess];
 }
 
+-(void)setNavigationBarColor:(UIColor*) color{
+    if(color)
+        self.navigationBarView.backgroundColor = color;
+}
+
 #pragma mark - Internal methods
 
 -(void) initCrucialObjects:(UIColor *)background showPageControl:(BOOL) showPageControl{
@@ -312,6 +317,8 @@
                 isThereNextIdentifier = NO;
             }
         }
+        if(self.navigationController && self.navigationController.navigationBar)
+            _navigationBarView.backgroundColor = self.navigationController.navigationBar.backgroundColor;
     }
 }
 
