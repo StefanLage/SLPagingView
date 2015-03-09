@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 	s.name = 'SLPagingView'
-	s.version = '0.0.4'
+	s.version = '0.0.5'
 	s.summary = 'Navigation bar system allowing to do a Tinder like or Twitter like'
 	s.homepage = 'https://github.com/StefanLage/SLPagingView'
 	s.license = 'MIT'

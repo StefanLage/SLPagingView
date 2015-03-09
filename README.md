@@ -160,6 +160,15 @@ By using one of these values:
 	};
 ````
 
+###Set navigation bar's background color
+
+You can update the background color of the navigation bar using the following method:
+
+````objective-c
+
+	setNavigationBarColor:(UIColor*) color;
+````
+
 ##Storyboard support
 
 This class can be implemented using Storyboard.
@@ -171,6 +180,11 @@ X corresponding to the index of the view, start from 0 and it works in ascending
 ![segue](Demos/TinderStoryboard/segue_params.png)
 
 You can find an example "TinderStoryboard" for more informations.
+
+###Set navigation bar's background color
+To set up the navigation bar's background color from the storyboard, you just need to it like all navigation bar.
+
+![segue](Demos/TinderStoryboard/navigation_bar_color.png)
 
 ##License
 Available under MIT license, please read LICENSE for more informations.
