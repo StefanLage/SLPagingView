@@ -507,7 +507,12 @@
 
 -(void)sendNewIndex:(UIScrollView *)scrollView{
     CGFloat xOffset    = scrollView.contentOffset.x;
+    NSInteger oldIndex = self.indexSelected;
     self.indexSelected = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
+    if(oldIndex != self.indexSelected)
+        [self notifyControllers:NSSelectorFromString(@"viewDidDisappear:")
+                         object:@(YES)
+                     checkIndex:YES];
     if(self.pageControl){
         if (self.pageControl.currentPage != self.indexSelected)
         {
@@ -527,6 +532,14 @@
 }
 
 #pragma mark - ScrollView delegate
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    // Try to notify the controller concerned
+    [self notifyControllers:NSSelectorFromString(@"viewWillDisappear:")
+                     object:@(YES)
+                 checkIndex:YES
+     ];
+}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     // Update nav items
