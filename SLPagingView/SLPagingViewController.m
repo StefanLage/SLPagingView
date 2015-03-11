@@ -12,7 +12,6 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIPageControl *pageControl;
-@property (nonatomic, strong) UIView *navigationBarView;
 @property (nonatomic, strong) NSMutableArray *navItemsViews;
 @property (nonatomic, strong) NSMutableArray *controllerReferences;
 @property (nonatomic) BOOL needToShowPageControl;
