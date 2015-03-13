@@ -265,6 +265,11 @@
     else if(controller.navigationItem && controller.navigationItem.titleView){
         v = controller.navigationItem.titleView;
     }
+    else{
+        UILabel *item = [UILabel new];
+        [item setText:NSStringFromClass(controller.class)];
+        v = item;
+    }
     // Adds a navigation item
     [self addNavigationItem:v
                         tag:tag];
