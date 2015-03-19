@@ -183,6 +183,7 @@
     [self notifyControllers:NSSelectorFromString(@"viewDidAppear:")
                      object:@(animated)
                  checkIndex:YES];
+    [self.navigationController.navigationBar addSubview:self.navigationBarView];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -199,6 +200,7 @@
     [self notifyControllers:NSSelectorFromString(@"viewWillDisappear:")
                      object:@(animated)
                  checkIndex:YES];
+    [self.navigationBarView removeFromSuperview];
 }
 
 - (void)viewDidLoad{
@@ -384,7 +386,6 @@
         if(self.tintPageControlColor) self.pageControl.pageIndicatorTintColor = self.tintPageControlColor;
         [self.navigationBarView addSubview:self.pageControl];
     }
-    [self.navigationController.navigationBar addSubview:self.navigationBarView];
 }
 
 // Add all views
