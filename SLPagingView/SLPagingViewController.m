@@ -13,7 +13,6 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIPageControl *pageControl;
 @property (nonatomic, strong) NSMutableArray *navItemsViews;
-@property (nonatomic, strong) NSMutableArray *controllerReferences;
 @property (nonatomic) BOOL needToShowPageControl;
 @property (nonatomic) BOOL isUserInteraction;
 @property (nonatomic) NSInteger indexSelected;
@@ -110,11 +109,11 @@
 -(id)initWithNavBarControllers:(NSArray *)controllers navBarBackground:(UIColor *)background showPageControl:(BOOL)addPageControl{
     NSMutableArray *views = [[NSMutableArray alloc] initWithCapacity:controllers.count];
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:controllers.count];
-    _controllerReferences = [[NSMutableArray alloc] initWithArray:controllers];
     for(int i =0; i<controllers.count; i++){
         // Be sure we got s subclass of UIViewController
         if([controllers[i] isKindOfClass:UIViewController.class]){
             UIViewController *ctr = controllers[i];
+            [self addChildViewController:ctr];
             [views addObject:[ctr view]];
             // Get associated item
             UILabel *item = [UILabel new];
@@ -146,11 +145,12 @@
 
 -(id)initWithNavBarItems:(NSArray *)items navBarBackground:(UIColor *)background controllers:(NSArray *)controllers showPageControl:(BOOL)addPageControl{
     NSMutableArray *views = [[NSMutableArray alloc] initWithCapacity:controllers.count];
-    _controllerReferences = [[NSMutableArray alloc] initWithArray:controllers];
     for(int i =0; i<controllers.count; i++){
         // Be sure we got s subclass of UIViewController
-        if([controllers[i] isKindOfClass:UIViewController.class])
+        if([controllers[i] isKindOfClass:UIViewController.class]){
+            [self addChildViewController:controllers[i]];
             [views addObject:[(UIViewController*)controllers[i] view]];
+        }
     }
     return [self initWithNavBarItems:items
                     navBarBackground:background
@@ -276,8 +276,8 @@
     // Save the controller
     [self.viewControllers setObject:controller.view
                              forKey:@(tag)];
-    // Save controller reference
-    [self.controllerReferences addObject:controller];
+    // Update controller's hierarchy
+    [self addChildViewController:controller];
     // Do we need to refresh the UI ?
     if(refresh)
        [self setupPagingProcess];
@@ -300,7 +300,6 @@
     _navigationSideItemsStyle          = SLNavigationSideItemsStyleDefault;
     _viewControllers                   = [NSMutableDictionary new];
     _navItemsViews                     = [NSMutableArray new];
-    _controllerReferences              = [NSMutableArray new];
 }
 
 // Load any defined controllers from the storyboard
@@ -328,13 +327,13 @@
 
 // Perform a specific selector for each controllers
 -(void)notifyControllers:(SEL)selector object:(id)object checkIndex:(BOOL)index{
-    if(index && self.controllerReferences.count > self.indexSelected) {
-        [(UIViewController*)self.controllerReferences[self.indexSelected] performSelectorOnMainThread:selector
+    if(index && self.childViewControllers.count > self.indexSelected) {
+        [(UIViewController*)self.childViewControllers[self.indexSelected] performSelectorOnMainThread:selector
                                                                                            withObject:object
                                                                                         waitUntilDone:NO];
     }
     else{
-        [self.controllerReferences enumerateObjectsUsingBlock:^(UIViewController* ctr, NSUInteger idx, BOOL *stop) {
+        [self.childViewControllers enumerateObjectsUsingBlock:^(UIViewController* ctr, NSUInteger idx, BOOL *stop) {
             [ctr performSelectorOnMainThread:selector
                                   withObject:object
                                waitUntilDone:NO];
