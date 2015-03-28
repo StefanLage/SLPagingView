@@ -395,7 +395,6 @@
         float width                 = SCREEN_SIZE.width * self.viewControllers.count;
         float height                = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.navigationBarView.bounds);
         self.scrollView.contentSize = (CGSize){width, height};
-        __block int i = 0;
         // Sort all keys in ascending
         NSArray *sortedIndexes = [self.viewControllers.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSNumber *key1, NSNumber *key2) {
             if ([key1 integerValue] > [key2 integerValue]) {
@@ -449,8 +448,7 @@
                                                                                           views:@{@"v" : v}]];
                 }
             else{
-                v.frame = (CGRect){SCREEN_SIZE.width * i, 0, SCREEN_SIZE.width, CGRectGetHeight(self.view.frame)};
-                i++;
+                v.frame = (CGRect){SCREEN_SIZE.width * idx, 0, SCREEN_SIZE.width, CGRectGetHeight(self.view.frame)};
             }
         }];
     }
