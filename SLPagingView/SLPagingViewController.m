@@ -69,12 +69,6 @@
                     ctr.tag = i;
                     [controllerKeys addObject:@(i)];
                 }
-                else if([[views objectAtIndex:i] isKindOfClass:UIViewController.class]){
-                    UIViewController *ctr = [views objectAtIndex:i];
-                    // Set the tag
-                    ctr.view.tag = i;
-                    [controllerKeys addObject:@(i)];
-                }
             }
             // Number of keys equals number of controllers ?
             if(controllerKeys.count == views.count)
@@ -109,11 +103,12 @@
 -(id)initWithNavBarControllers:(NSArray *)controllers navBarBackground:(UIColor *)background showPageControl:(BOOL)addPageControl{
     NSMutableArray *views = [[NSMutableArray alloc] initWithCapacity:controllers.count];
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:controllers.count];
+    NSMutableArray *viewControllers = [[NSMutableArray alloc] initWithCapacity:controllers.count];
     for(int i =0; i<controllers.count; i++){
         // Be sure we got s subclass of UIViewController
         if([controllers[i] isKindOfClass:UIViewController.class]){
             UIViewController *ctr = controllers[i];
-            [self addChildViewController:ctr];
+            [viewControllers addObject:ctr];
             [views addObject:[ctr view]];
             // Get associated item
             UILabel *item = [UILabel new];
@@ -121,10 +116,16 @@
             [items addObject:item];
         }
     }
-    return [self initWithNavBarItems:items
+    self = [self initWithNavBarItems:items
                     navBarBackground:background
                                views:views
                      showPageControl:addPageControl];
+    if (self) {
+        for(int i =0; i<controllers.count; i++){
+            _viewControllersDict[@(i)] = controllers[i];
+        }
+    }
+    return self;
 }
 
 #pragma mark - constructors with items & controllers
@@ -148,24 +149,25 @@
     for(int i =0; i<controllers.count; i++){
         // Be sure we got s subclass of UIViewController
         if([controllers[i] isKindOfClass:UIViewController.class]){
-            [self addChildViewController:controllers[i]];
             [views addObject:[(UIViewController*)controllers[i] view]];
         }
     }
-    return [self initWithNavBarItems:items
+    self = [self initWithNavBarItems:items
                     navBarBackground:background
                                views:views
                      showPageControl:addPageControl];
+    if (self) {
+        for(int i =0; i<controllers.count; i++){
+            _viewControllersDict[@(i)] = controllers[i];
+        }
+    }
+    return self;
 }
 
 #pragma mark - LifeCycle
 
-- (void)loadView {
-    [super loadView];
-    // Notify all conctrollers
-    [self notifyControllers:NSSelectorFromString(@"loadView")
-                     object:nil
-                 checkIndex:NO];
+- (void)viewDidLoad {
+    [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
     // Try to load controller from storyboard
     [self loadStoryboardControllers];
@@ -180,38 +182,12 @@
                                              selector:@selector(orientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
-    // Notify all conctrollers
-    [self notifyControllers:NSSelectorFromString(@"viewDidAppear:")
-                     object:@(animated)
-                 checkIndex:YES];
     [self.navigationController.navigationBar addSubview:self.navigationBarView];
-}
-
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    // Notify all conctrollers
-    [self notifyControllers:NSSelectorFromString(@"viewDidAppear:")
-                     object:@(animated)
-                 checkIndex:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    // Notify all conctrollers
-    [self notifyControllers:NSSelectorFromString(@"viewWillDisappear:")
-                     object:@(animated)
-                 checkIndex:YES];
     [self.navigationBarView removeFromSuperview];
-}
-
-- (void)viewDidLoad{
-    [super viewDidLoad];
-    // Notify all conctrollers
-    [self notifyControllers:NSSelectorFromString(@"viewDidLoad")
-                     object:nil
-                 checkIndex:NO];
-    [self setCurrentIndex:self.indexSelected
-                 animated:NO];
 }
 
 -(void)dealloc{
@@ -279,10 +255,10 @@
     [self addNavigationItem:v
                         tag:tag];
     // Save the controller
+    [self.viewControllersDict setObject:controller
+                                 forKey:@(tag)];
     [self.viewsDict setObject:controller.view
                              forKey:@(tag)];
-    // Update controller's hierarchy
-    [self addChildViewController:controller];
     // Do we need to refresh the UI ?
     if(refresh)
        [self setupPagingProcess];
@@ -303,7 +279,8 @@
     _isUserInteraction                 = YES;
     // Default value for the navigation style
     _navigationSideItemsStyle          = SLNavigationSideItemsStyleDefault;
-    _viewsDict                   = [NSMutableDictionary new];
+    _viewsDict                         = [NSMutableDictionary new];
+    _viewControllersDict               = [NSMutableDictionary new];
     _navItemsViews                     = [NSMutableArray new];
 }
 
@@ -327,22 +304,6 @@
         }
         if(self.navigationController && self.navigationController.navigationBar)
             _navigationBarView.backgroundColor = self.navigationController.navigationBar.backgroundColor;
-    }
-}
-
-// Perform a specific selector for each controllers
--(void)notifyControllers:(SEL)selector object:(id)object checkIndex:(BOOL)index{
-    if(index && self.childViewControllers.count > self.indexSelected) {
-        [(UIViewController*)self.childViewControllers[self.indexSelected] performSelectorOnMainThread:selector
-                                                                                           withObject:object
-                                                                                        waitUntilDone:NO];
-    }
-    else{
-        [self.childViewControllers enumerateObjectsUsingBlock:^(UIViewController* ctr, NSUInteger idx, BOOL *stop) {
-            [ctr performSelectorOnMainThread:selector
-                                  withObject:object
-                               waitUntilDone:NO];
-        }];
     }
 }
 
@@ -412,18 +373,27 @@
 
         [sortedIndexes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             UIView *v = self.viewsDict[@(idx)];
+            UIViewController *vc = self.viewControllersDict[@(idx)];\
+            if (vc) {
+                [vc willMoveToParentViewController:self];
+                [self addChildViewController:vc];
+            }
             [self.scrollView addSubview:v];
+            if (vc) {
+                [vc didMoveToParentViewController:self];
+            }
             if([self useAutoLayout:v]){
                 // Using AutoLayout
                 v.translatesAutoresizingMaskIntoConstraints = NO;
                 // Width constraint, half of parent view width
-                [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:v
-                                                                            attribute:NSLayoutAttributeWidth
-                                                                            relatedBy:NSLayoutRelationEqual
-                                                                               toItem:self.scrollView
-                                                                            attribute:NSLayoutAttributeWidth
-                                                                           multiplier:1.0
-                                                                             constant:0]];
+                [self.scrollView addConstraint:
+                 [NSLayoutConstraint constraintWithItem:v
+                                              attribute:NSLayoutAttributeWidth
+                                              relatedBy:NSLayoutRelationEqual
+                                                 toItem:self.scrollView
+                                              attribute:NSLayoutAttributeWidth
+                                             multiplier:1.0
+                                               constant:0]];
                 // Height constraint, half of parent view height
                 [self.scrollView addConstraint:
                  [NSLayoutConstraint constraintWithItem:v
@@ -509,12 +479,7 @@
 
 -(void)sendNewIndex:(UIScrollView *)scrollView{
     CGFloat xOffset    = scrollView.contentOffset.x;
-    NSInteger oldIndex = self.indexSelected;
     self.indexSelected = ((int) roundf(xOffset) % (self.navigationBarView.subviews.count * (int)SCREEN_SIZE.width)) / SCREEN_SIZE.width;
-    if(oldIndex != self.indexSelected)
-        [self notifyControllers:NSSelectorFromString(@"viewDidDisappear:")
-                         object:@(YES)
-                     checkIndex:YES];
     if(self.pageControl){
         if (self.pageControl.currentPage != self.indexSelected)
         {
@@ -527,21 +492,9 @@
         if(self.didChangedPage)
             self.didChangedPage(self.indexSelected);
     }
-    // Try to notify the controller concerned
-    [self notifyControllers:NSSelectorFromString(@"viewDidAppear:")
-                     object:@(YES)
-                 checkIndex:YES];
 }
 
 #pragma mark - ScrollView delegate
-
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    // Try to notify the controller concerned
-    [self notifyControllers:NSSelectorFromString(@"viewWillDisappear:")
-                     object:@(YES)
-                 checkIndex:YES
-     ];
-}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     // Update nav items

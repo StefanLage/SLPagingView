@@ -55,6 +55,13 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
  *  @param currentPage
  */
 @property (nonatomic, copy) SLPagingViewDidChanged didChangedPage;
+
+/*
+ * Contains all child view controllers 
+ * if initialized with controlles not views
+ */
+@property (nonatomic, strong) NSMutableDictionary *viewControllersDict;
+
 /*
  *  Contains all views displayed
  */
