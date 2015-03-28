@@ -58,7 +58,7 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
 /*
  *  Contains all views displayed
  */
-@property (nonatomic, strong) NSMutableDictionary *viewControllers;
+@property (nonatomic, strong) NSMutableDictionary *viewsDict;
 /*
  *  Tint color of the page control
  */

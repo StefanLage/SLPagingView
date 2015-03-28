@@ -78,7 +78,7 @@
             }
             // Number of keys equals number of controllers ?
             if(controllerKeys.count == views.count)
-                _viewControllers = [[NSMutableDictionary alloc] initWithObjects:views
+                _viewsDict = [[NSMutableDictionary alloc] initWithObjects:views
                                                                         forKeys:controllerKeys];
             else{
                 // Something went wrong -> inform the client
@@ -258,7 +258,7 @@
 }
 
 -(void)addViewControllers:(UIViewController *) controller needToRefresh:(BOOL) refresh{
-    int tag = (int)self.viewControllers.count;
+    int tag = (int)self.viewsDict.count;
     // Try to get a navigation item
     UIView *v = nil;
     if(controller.title){
@@ -278,7 +278,7 @@
     [self addNavigationItem:v
                         tag:tag];
     // Save the controller
-    [self.viewControllers setObject:controller.view
+    [self.viewsDict setObject:controller.view
                              forKey:@(tag)];
     // Update controller's hierarchy
     [self addChildViewController:controller];
@@ -302,7 +302,7 @@
     _isUserInteraction                 = YES;
     // Default value for the navigation style
     _navigationSideItemsStyle          = SLNavigationSideItemsStyleDefault;
-    _viewControllers                   = [NSMutableDictionary new];
+    _viewsDict                   = [NSMutableDictionary new];
     _navItemsViews                     = [NSMutableArray new];
 }
 
@@ -392,14 +392,14 @@
 
 // Add all views
 -(void)addControllers{
-    if(self.viewControllers
-       && self.viewControllers.count > 0){
-        float width                 = SCREEN_SIZE.width * self.viewControllers.count;
+    if(self.viewsDict
+       && self.viewsDict.count > 0){
+        float width                 = SCREEN_SIZE.width * self.viewsDict.count;
         float height                = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.navigationBarView.bounds);
         self.scrollView.contentSize = (CGSize){width, height};
         __block int i = 0;
         // Sort all keys in ascending
-        NSArray *sortedIndexes = [self.viewControllers.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSNumber *key1, NSNumber *key2) {
+        NSArray *sortedIndexes = [self.viewsDict.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSNumber *key1, NSNumber *key2) {
             if ([key1 integerValue] > [key2 integerValue]) {
                 return (NSComparisonResult)NSOrderedDescending;
             }
@@ -410,7 +410,7 @@
         }];
 
         [sortedIndexes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            UIView *v = self.viewControllers[@(idx)];
+            UIView *v = self.viewsDict[@(idx)];
             [self.scrollView addSubview:v];
             if([self useAutoLayout:v]){
                 // Using AutoLayout
@@ -431,7 +431,7 @@
                                                                             attribute:NSLayoutAttributeHeight
                                                                            multiplier:1.0
                                                                              constant:0]];
-                UIView *previous = [self.viewControllers objectForKey:[NSNumber numberWithFloat:(idx - 1)]];
+                UIView *previous = [self.viewsDict objectForKey:[NSNumber numberWithFloat:(idx - 1)]];
                 if(previous)
                     // Distance constraint: set distance between previous view and the current one
                     [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[previous]-0-[v]"
@@ -462,7 +462,7 @@
 -(void)tapOnHeader:(UITapGestureRecognizer *)recognizer{
     if(self.isUserInteraction){
         // Get the wanted view
-        UIView *view = [self.viewControllers objectForKey:@(recognizer.view.tag)];
+        UIView *view = [self.viewsDict objectForKey:@(recognizer.view.tag)];
         [self.scrollView scrollRectToVisible:view.frame
                                     animated:YES];
     }
