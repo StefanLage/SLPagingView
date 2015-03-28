@@ -183,6 +183,9 @@
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     [self.navigationController.navigationBar addSubview:self.navigationBarView];
+    // call once manually to update items and execute custom behaviour blocks
+    // for initial setup
+    [self scrollViewDidScroll:self.scrollView];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
