@@ -215,8 +215,10 @@
 
 -(void)dealloc{
     // Remove Observers
-    [[NSNotificationCenter defaultCenter]removeObserver:self
-                                             forKeyPath:UIDeviceOrientationDidChangeNotification];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIDeviceOrientationDidChangeNotification
+                                                  object:nil];
+
     // Close relationships
     _didChangedPage           = nil;
     _pagingViewMoving         = nil;
